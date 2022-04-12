@@ -9,7 +9,11 @@
     --color-light:white;
     --color-dark:black;
 }
+button,input{
+    cursor: pointer;
+}
 .shop-container{
+    margin: 3rem 0;
     display: grid;
     grid-template-columns: 1fr 4fr;
     width: 100%;
@@ -57,6 +61,7 @@
     color:var(--accent-col);
     font-size: 1.5rem;
     width: max-content;
+    cursor: pointer;
 }
 .rating-item.active{
     border: 1px solid var(--accent-col);
@@ -94,4 +99,34 @@
     margin: 0;
     padding: .5rem;
     background-color: var(--accent-col);
+}
+.reset{
+    width: 100%;
+    padding: 3rem .5rem;
+
+
+   
+}
+.reset>button{
+ padding: .5rem;
+ background-color: var(--accent-col);
+}
+.shop-sorter{
+    display: flex;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    margin-bottom: 1rem;
+}
+.shop-sorter>:first-child{
+    min-width: 80px;
+}
+.sorter-btn{
+    padding: .5rem;
+    max-width: 150px;
+    margin: 0 .5rem;
+    background-color: white;
+}
+.sorter-btn.active{
+    background-color: var(--accent-col);
+    color: var(--color-light);
 }

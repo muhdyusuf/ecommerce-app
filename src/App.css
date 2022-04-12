@@ -41,6 +41,7 @@ section{
 .card{
     max-width: 100%;
     min-height: 100%;
+    cursor: pointer;
 }
 .card-img{
     min-width: 100%;

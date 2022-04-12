@@ -2,6 +2,7 @@ import React from 'react'
 import {FaHeart,FaRegHeart} from 'react-icons/fa'
 import { useState } from 'react'
 import Modal from './Modal'
+import {useNavigate} from 'react-router-dom'
 
 function Itemlist({data,updateUser,user}) {
    const [modal,updateModal]=useState([false,"liked","added"])
@@ -73,13 +74,14 @@ function Itemlist({data,updateUser,user}) {
         }
 
     }
+    let navigate=useNavigate()
     
     
 
   return (
     <div className=" grid">
         {data.map(item=>(
-            <div key={item.id} className="card" >
+            <div key={item.id} className="card" onClick={()=>{navigate(`/product/${item.id}`)}} >
                 <div className="card-img">
                     <img src={item.image} alt="" />
                     <div className="img-hover">

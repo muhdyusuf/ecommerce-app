@@ -14,6 +14,7 @@ function Shop({user,updateUser}) {
       category:[],
       rating:""
     })
+    const [shopSorter,updateSorter]=useState("re")
 
     useEffect(()=>{
       fetch('https://fakestoreapi.com/products')
@@ -32,7 +33,7 @@ function Shop({user,updateUser}) {
     } 
     console.log(shopItem)
      
-    const getShopItem=()=>{
+    const newShopItem=()=>{
       
       let filteredItem=shopItem
       if(shopFilter.min!==""){
@@ -58,9 +59,35 @@ function Shop({user,updateUser}) {
       }
      return filteredItem
 
-
-
     }
+
+
+  const sortedItem=()=>{
+     let newSortedItem=[...newShopItem()]
+  
+    if(shopSorter=="lowToHigh"){
+      newSortedItem=newSortedItem.sort((a,b)=>a.price-b.price)
+    }
+    else if(shopSorter=="highToLow"){
+      newSortedItem=newSortedItem.sort((a,b)=>b.price-a.price)
+    }
+    return newSortedItem
+
+  }
+  function setSorter(val){
+    if(shopSorter==val){
+      updateSorter("relevance")
+    }
+    else if(val=="highToLow"){
+      updateSorter(val)
+    }
+    else if(val=="lowToHigh"){
+      updateSorter(val)
+    }
+
+  }
+
+
     function updateCategory(e){
       let newShopFilter=shopFilter
       if(e.target.checked){
@@ -101,6 +128,7 @@ function Shop({user,updateUser}) {
     function setPriceRange(e){
       
         let val=e.target.value.match(/[0-9]/g)
+        console.log(val)
         if(val){
            val=parseInt(val.join(""))
         }
@@ -108,18 +136,19 @@ function Shop({user,updateUser}) {
           val=""
         }
         const newPrice=price
+
         if(e.target.name=="min"){
-          newPrice.min=e.target.value
-          updatePrice({...newPrice})
+
+          e.target.value=val
+          newPrice.min=val
         }
         else if(e.target.name=="max"){
-          newPrice.max=e.target.value
-          updatePrice({...newPrice})
+          e.target.value=val
+          newPrice.max=val
+          
         }
+        updatePrice({...newPrice})
         
-
-        
-    
 
     }
    const [isPriceValid,setPriceValid]=useState(true)
@@ -146,6 +175,22 @@ function Shop({user,updateUser}) {
       
 
     }
+    function resetFilter(){
+      const newFilter={
+        min:"",
+        max:"",
+        category:[],
+        rating:""
+      }
+      const checkbox=document.querySelectorAll("#checkbox")
+      checkbox.forEach(item=>{
+        item.checked=false
+      })
+      document.getElementById("minPrice").value=null
+      document.getElementById("maxPrice").value=null
+      setRating(0)
+      updateFilter({...newFilter})
+    }
    
     
  
@@ -157,9 +202,9 @@ function Shop({user,updateUser}) {
                <h1>Filter</h1>
             <div className="price-range filter-box">
               <p>Price</p>
-                <input type="text" placeholder='Min' name='min' onChange={(e)=>setPriceRange(e)} />
-                <input type="text" placeholder='Max' name='max' 
-                onChange={(e)=>setPriceRange(e)} />
+                <input type="text" placeholder='Min' onChange={(e)=>setPriceRange(e)} id="minPrice" name='min'/>
+                <input type="text" placeholder='Max' 
+                onChange={(e)=>setPriceRange(e)} id="maxPrice" name='max'/>
                 <p className={isPriceValid? "price-alert":"price-alert active"}>Please enter valid price range</p>
 
                 <button onClick={setPrice}>Apply</button>
@@ -169,7 +214,7 @@ function Shop({user,updateUser}) {
               {getCategory().map(item=>{
                 return(
                   <div className="category-item" key={item}>
-                    <input type="checkbox" value={item} onChange={(e)=>updateCategory(e)}/>
+                    <input type="checkbox" value={item} onChange={(e)=>updateCategory(e)} id="checkbox"/>
                     <label>{item}</label>
                   </div>
                 )
@@ -178,53 +223,62 @@ function Shop({user,updateUser}) {
             </div>
             <div className="by-rating filter-box">
               <p>Rating</p>
-              
-              
-                <div className={rating==5?"rating-item active":"rating-item"}onClick={()=>setRatingFilter(5) }>
-                 
-                    <AiFillStar/>
-                    <AiFillStar/>
-                    <AiFillStar/>
-                    <AiFillStar/>
-                    <AiFillStar/>
-                </div>
-                <div className={rating==4?"rating-item active":"rating-item"} onClick={()=>setRatingFilter(4)}>
-                    <AiFillStar/>
-                    <AiFillStar/>
-                    <AiFillStar/>
-                    <AiFillStar/>
-                    <AiOutlineStar/>
-                </div>
-                <div className={rating==3?"rating-item active":"rating-item"} onClick={()=>setRatingFilter(3)}>
-                    <AiFillStar/>
-                    <AiFillStar/>
-                    <AiFillStar/>
-                    <AiOutlineStar/>
-                    <AiOutlineStar/>
-                </div>
-                <div className={rating==2?"rating-item active":"rating-item"} onClick={()=>setRatingFilter(2)}>
-                    <AiFillStar/>
-                    <AiFillStar/>
-                    <AiOutlineStar/>
-                    <AiOutlineStar/>
-                    <AiOutlineStar/>
-                </div>
-                <div className={rating==1?"rating-item active":"rating-item"} onClick={()=>setRatingFilter(1)}>
-                    <AiFillStar/>
-                    <AiOutlineStar/>
-                    <AiOutlineStar/>
-                    <AiOutlineStar/>
-                    <AiOutlineStar/>
-                </div>
+              <div className={rating==5?"rating-item active":"rating-item"}onClick={()=>setRatingFilter(5) }>
+                
+                  <AiFillStar/>
+                  <AiFillStar/>
+                  <AiFillStar/>
+                  <AiFillStar/>
+                  <AiFillStar/>
+              </div>
+              <div className={rating==4?"rating-item active":"rating-item"} onClick={()=>setRatingFilter(4)}>
+                  <AiFillStar/>
+                  <AiFillStar/>
+                  <AiFillStar/>
+                  <AiFillStar/>
+                  <AiOutlineStar/>
+              </div>
+              <div className={rating==3?"rating-item active":"rating-item"} onClick={()=>setRatingFilter(3)}>
+                  <AiFillStar/>
+                  <AiFillStar/>
+                  <AiFillStar/>
+                  <AiOutlineStar/>
+                  <AiOutlineStar/>
+              </div>
+              <div className={rating==2?"rating-item active":"rating-item"} onClick={()=>setRatingFilter(2)}>
+                  <AiFillStar/>
+                  <AiFillStar/>
+                  <AiOutlineStar/>
+                  <AiOutlineStar/>
+                  <AiOutlineStar/>
+              </div>
+              <div className={rating==1?"rating-item active":"rating-item"} onClick={()=>setRatingFilter(1)}>
+                  <AiFillStar/>
+                  <AiOutlineStar/>
+                  <AiOutlineStar/>
+                  <AiOutlineStar/>
+                  <AiOutlineStar/>
+              </div>
+            </div>
+
+            <div className="filter-box reset">
+             <button onClick={resetFilter}>Reset filter</button>
             </div>
             
             
 
            </div>
+           <div className="shop-right">
+            <div className="shop-sorter">
+              <h3>Sort by</h3>
+              <button onClick={()=>setSorter("highToLow")} className={shopSorter=="highToLow"? "sorter-btn active": "sorter-btn"} >Price: High to Low</button>
+              <button onClick={()=>setSorter("lowToHigh")} className={shopSorter=="lowToHigh"? "sorter-btn active": "sorter-btn"}>Price: Low to High</button>
+            </div>
            <div className="shop-item">
-           <Itemlist data={getShopItem()} updateUser={updateUser} user={user}/>
+           <Itemlist data={sortedItem()} updateUser={updateUser} user={user}/>
            </div>
-           <button>reset</button>
+           </div>
+           
          </div>
 
      

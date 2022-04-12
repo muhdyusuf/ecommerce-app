@@ -7,6 +7,7 @@ import Like from './component/Like'
 import Footer from './component/Footer'
 import ShoppingCart from './component/ShoppingCart'
 import Shop from './component/Shop';
+import Product from './component/Product';
 
 
 
@@ -40,7 +41,7 @@ function App() {
       <Routes>
         <Route path='' element={<Home data={data} user={user} updateUser={updateUser}/>}/>
         <Route path="/shop" element={<Shop data={data} user={user} updateUser={updateUser}/>}/>
-        
+        <Route path="/product/:productId" element={<Product/>}/>
       </Routes>
        <Footer/>
     </Router>
