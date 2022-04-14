@@ -1,11 +1,12 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
+import {Link,useNavigate} from 'react-router-dom'
 import ShoppingCart from './ShoppingCart'
 import {HiOutlineShoppingCart} from 'react-icons/hi'
 import {BiHeart,BiSearch} from 'react-icons/bi'
 import { useState } from 'react'
 
 function Navbar({user,updateUser}) {
+  let navigate=useNavigate()
    function updateLogin(){
        updateUser(user=>{
            const newState={...user}
@@ -81,11 +82,13 @@ function Navbar({user,updateUser}) {
                 <BiSearch className='nav-icon'/>
 
             </div>
-            <div className="shopping-cart-icon nav-icon">
+            <div className="shopping-cart-icon nav-icon"
+            onClick={()=>{navigate(`/shoppingCart`)}} >
             <HiOutlineShoppingCart/>
             <span className={user.cart.length>0? "nav-label active cart-label":"nav-label cart-label"}>{user.cart.length}</span>
             </div>
-            <div className="like-icon nav-icon">
+            <div className="like-icon nav-icon"
+            onClick={()=>{navigate(`/liked`)}}>
             <BiHeart/>
             <span className={user.liked.length>0? "nav-label active liked-label":"nav-label liked-label"}>{user.liked.length}</span>
 

@@ -43,6 +43,7 @@ section{
     min-height: 100%;
     cursor: pointer;
 }
+
 .card-img{
     min-width: 100%;
     max-width: 100%;
@@ -54,6 +55,7 @@ section{
     align-items: center;
     position: relative;
     cursor: pointer;
+   
 }
 .card-img>img{
     max-width: 100%;
@@ -437,6 +439,7 @@ nav{
    
     transform: translateY(0);
     transition: transform ease-in-out .3s;
+   
 }
 
 .img-hover{

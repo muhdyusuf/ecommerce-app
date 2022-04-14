@@ -60,7 +60,7 @@ function Itemlist({data,updateUser,user}) {
       }
 
 
-    const isLiked=(val)=>{
+     const isLiked=(val)=>{
         const isDuplicate=user.liked.findIndex(item=>item.id==val.id)
         if(isDuplicate<0){
             return (
@@ -75,16 +75,16 @@ function Itemlist({data,updateUser,user}) {
 
     }
     let navigate=useNavigate()
-    
-    
+   
+   
 
   return (
     <div className=" grid">
         {data.map(item=>(
-            <div key={item.id} className="card" onClick={()=>{navigate(`/product/${item.id}`)}} >
+            <div key={item.id} className="card"  >
                 <div className="card-img">
-                    <img src={item.image} alt="" />
-                    <div className="img-hover">
+                    <img src={item.image} alt="" onClick={()=>{navigate(`/product/${item.id}`)}} />
+                    <div className="img-hover" >
                         {isLiked(item)}
                         <button className='btn' onClick={()=>updateUserCart(item)}>ADD TO CART</button>
                     </div>
