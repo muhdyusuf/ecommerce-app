@@ -4,6 +4,7 @@ import './Cart.css'
 
 
 function Cart({user,updateUser}) {
+  let navigate=useNavigate()
 
   useEffect(()=>{
     updateUser(user=>{
@@ -15,7 +16,7 @@ function Cart({user,updateUser}) {
   },[])
 
 
-  let navigate=useNavigate()
+  
   
   const isAllSelected=user.cart.every(item=>item.isChecked==true)
 
@@ -63,10 +64,33 @@ function Cart({user,updateUser}) {
    
    
  }
+function handleCheckOut(){
+  const selectedItem=user.cart.filter(item=>item.isChecked)
+  if(selectedItem.length==0){
+    return
+  }
+  else{
+    navigate('/checkout')
+    let newUser={...user}
+    newUser.checkout=selectedItem
+    updateUser({...newUser})
+    
+
+  }
+
+}
+
+
 
  const cartItem=()=>{
-   const total=user.cart.reduce((total,item)=>
-     item.price*item.quantity+total
+   const total=user.cart.reduce((total,item)=>{
+      if(item.isChecked){
+       return item.price*item.quantity+total
+      }
+      else{
+       return 0+total
+      }
+     }
    ,0)
    if (user.cart.length==0 || !user.cart){
      return(
@@ -116,7 +140,7 @@ function Cart({user,updateUser}) {
           </div>
           <div>
             <p>Total : <span>RM{total}</span></p>
-            <button >check Out</button>
+            <button onClick={handleCheckOut}>Check Out</button>
           </div>
           
 
@@ -128,8 +152,11 @@ function Cart({user,updateUser}) {
  }
   return (
     <section>
+      <div className="page-header">
+       <h1>Shopping cart</h1>
+      </div>
       <div className="container">
-        <h1>Shopping cart</h1>
+       
         {cartItem()}
         
 

@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ShoppingCart() {
+function ShoppingCart({user,updateUser}) {
   return (
     <div>ShoppingCart</div>
   )

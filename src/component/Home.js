@@ -114,7 +114,7 @@ function Home({data,user,updateUser}) {
                     <button type="submit">Subscribe</button>
                 </form>
                 
-           </div>letter
+           </div>
             
         </div>
             </div>

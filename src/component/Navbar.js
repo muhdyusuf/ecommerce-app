@@ -46,7 +46,7 @@ function Navbar({user,updateUser}) {
             <p>{'Shop Event & Save Up To'}<span> 65% Off</span></p>
             <div className="nav-upper-input">
                 <div className="language-input">
-                   <label for="language"></label>
+                   <label htmlFor="language"></label>
                    <select name="language" id="">
                     <option value="english">English</option>
                     </select> 

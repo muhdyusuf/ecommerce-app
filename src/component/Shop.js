@@ -196,6 +196,9 @@ function Shop({user,updateUser}) {
  
   return (
     <section className='shop'>
+      <div className="page-header">
+        <h1>Shop</h1>
+      </div>
       <div className="container">
          <div className="shop-container">
            <div className="shop-category">

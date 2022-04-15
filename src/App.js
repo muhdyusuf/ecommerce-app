@@ -9,6 +9,7 @@ import ShoppingCart from './component/ShoppingCart'
 import Shop from './component/Shop';
 import Product from './component/Product';
 import Cart from './component/Cart';
+import Checkout from './component/Checkout';
 
 
 
@@ -20,7 +21,47 @@ function App() {
       isLoggedIn:true,
       id:"aasdasd",
       name:"lorem",
-      cart:[{
+      address:{
+        phone:"012338432",
+        lot:"lot 3 aras 20",
+        poscode:"90000",
+        city:"sandakan",
+        state:"Sabah",
+        country:"Malaysia",
+        
+
+      },
+      checkout:[
+        {
+          "id": 1,
+          "title": "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
+          "price": 109.95,
+          "description": "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",
+          "category": "men's clothing",
+          "image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+          "quantity":1,
+          "rating": {
+          "rate": 3.9,
+          "count": 120
+          }
+          },
+          {
+          "id": 2,
+          "title": "Mens Casual Premium Slim Fit T-Shirts ",
+          "price": 22.3,
+          "description": "Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight & soft fabric for breathable and comfortable wearing. And Solid stitched shirts with round neck made for durability and a great fit for casual fashion wear and diehard baseball fans. The Henley style round neckline includes a three-button placket.",
+          "category": "men's clothing",
+          "quantity":1,
+          "image": "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
+          "rating": {
+          "rate": 4.1,
+          "count": 259
+          }
+          }
+
+        ],
+      cart:[],
+      liked:[{
         "id": 1,
         "title": "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
         "price": 109.95,
@@ -58,8 +99,7 @@ function App() {
         "rate": 4.7,
         "count": 500
         }
-        }],
-      liked:[]
+        }]
     
     })
 
@@ -80,12 +120,19 @@ function App() {
       
       <Routes>
         <Route path='' element={<Home data={data} user={user} updateUser={updateUser}/>}/>
+
         <Route path="/shop" element={<Shop data={data} user={user} updateUser={updateUser}/>}/>
+
         <Route path="/product/:productId" element={<Product  data={data} user={user} updateUser={updateUser}/>}/>
+
         <Route path="/shoppingCart" element={<Cart
-        data={data} user={user} updateUser={updateUser}/>}/>
+        user={user} updateUser={updateUser}/>}/>
+
         <Route path="/liked" element={<Like
-        data={data} user={user} updateUser={updateUser}/>}/>
+         user={user} updateUser={updateUser}/>}/>
+
+         <Route path="/checkout" element={<Checkout
+         user={user} updateUser={updateUser}/>}/>
       </Routes>
        <Footer/>
     </Router>
