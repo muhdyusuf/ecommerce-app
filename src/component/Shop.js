@@ -5,7 +5,7 @@ import { useEffect,useState } from 'react'
 import {AiFillStar,AiOutlineStar} from 'react-icons/ai'
 
 
-function Shop({user,updateUser}) {
+function Shop({isLogIn,user,updateUser}) {
     
     const[shopItem,updateShopItem]=useState([])
     const [shopFilter,updateFilter]=useState({
@@ -278,7 +278,7 @@ function Shop({user,updateUser}) {
               <button onClick={()=>setSorter("lowToHigh")} className={shopSorter=="lowToHigh"? "sorter-btn active": "sorter-btn"}>Price: Low to High</button>
             </div>
            <div className="shop-item">
-           <Itemlist data={sortedItem()} updateUser={updateUser} user={user}/>
+           <Itemlist isLogIn={isLogIn} data={sortedItem()} updateUser={updateUser} user={user}/>
            </div>
            </div>
            

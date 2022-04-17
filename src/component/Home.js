@@ -9,7 +9,7 @@ import Hero from './Hero'
 import Itemlist from './Itemlist'
 
 
-function Home({data,user,updateUser}) {
+function Home({isLogIn,data,user,updateUser}) {
     const [currentslide,updateSlide]=useState("newArrival")
 
     function changeCarousel(val){
@@ -88,9 +88,9 @@ function Home({data,user,updateUser}) {
                 <span></span>
             </div>
             <div className="featured-group">
-                <Itemlist data={data} updateUser={updateUser} user={user} />
-                <Itemlist data={data} updateUser={updateUser} user={user}/>
-                <Itemlist data={data} updateUser={updateUser} user={user}/>
+                <Itemlist isLogIn={isLogIn}  data={data} updateUser={updateUser} user={user} />
+                <Itemlist isLogIn={isLogIn}  data={data} updateUser={updateUser} user={user}/>
+                <Itemlist isLogIn={isLogIn}  data={data} updateUser={updateUser} user={user}/>
                 
             </div>
             <div className="shop-button">

@@ -5,20 +5,25 @@ import Navbar from './component/Navbar';
 import Home from './component/Home'
 import Like from './component/Like'
 import Footer from './component/Footer'
-import ShoppingCart from './component/ShoppingCart'
+
 import Shop from './component/Shop';
 import Product from './component/Product';
 import Cart from './component/Cart';
 import Checkout from './component/Checkout';
+import Login from './component/Login';
+import Register from './component/Register';
+import ErrorPage from './component/ErrorPage';
+
 
 
 
 
 function App() {
+ 
+ 
   const [data,setData]= useState([])
   const [user,updateUser]=useState(
     {
-      isLoggedIn:true,
       id:"aasdasd",
       name:"lorem",
       address:{
@@ -28,8 +33,6 @@ function App() {
         city:"sandakan",
         state:"Sabah",
         country:"Malaysia",
-        
-
       },
       checkout:[
         {
@@ -102,6 +105,19 @@ function App() {
         }]
     
     })
+  const [isLogIn,updateLogin]=useState(true)
+
+  useEffect(()=>{
+    const isLogIn=localStorage.getItem("isLogin")
+    JSON.parse(isLogIn) ? updateLogin(true):updateLogin(false)
+    console.log(isLogIn)
+
+  },[])
+
+  useEffect(()=>{
+    console.log(isLogIn)
+    localStorage.setItem("isLogin",isLogIn)
+  },[isLogIn])
 
  useEffect(()=>{
   fetch('https://fakestoreapi.com/products')
@@ -109,30 +125,49 @@ function App() {
   .then(json=>setData(json))
 
  },[])
+  
 
 
   return (
     <>
   
     <Router>
-      <Navbar user={user} updateUser={updateUser}/>
+      <Navbar isLogIn={isLogIn} updateLogin={updateLogin} user={user} />
       <div className="under-nav"></div>
       
       <Routes>
-        <Route path='' element={<Home data={data} user={user} updateUser={updateUser}/>}/>
+        <Route path='' element={<Home isLogIn={isLogIn} data={data} user={user} updateUser={updateUser}/>}/>
+        <Route path="/shop" element={<Shop isLogIn={isLogIn} data={data} user={user} updateUser={updateUser}/>}/>
+        <Route path="/product/:productId" element={<Product isLogIn={isLogIn}  data={data} user={user} updateUser={updateUser}/>}/>
 
-        <Route path="/shop" element={<Shop data={data} user={user} updateUser={updateUser}/>}/>
+        {isLogIn && (
+          <>
+          <Route path="/cart" element={<Cart
+             user={user} updateUser={updateUser}/>}/>
+           <Route path="/liked" element={<Like
+             user={user} updateUser={updateUser}/>}/>
+           <Route path="/checkout" element={<Checkout
+             user={user} updateUser={updateUser}/>}/>
+            <Route path="*" element={<ErrorPage isLogIn={isLogIn}/>}/>
+         </>
 
-        <Route path="/product/:productId" element={<Product  data={data} user={user} updateUser={updateUser}/>}/>
+        )}
+        {!isLogIn && (
+          <>
+            <Route path="/login" element={<Login updateLogin={updateLogin} />}/>
+            <Route path="/register" element={<Register/>}/>
+            <Route path="*" element={<Login updateLogin={updateLogin}/>}/>
+          
+          </>
 
-        <Route path="/shoppingCart" element={<Cart
-        user={user} updateUser={updateUser}/>}/>
 
-        <Route path="/liked" element={<Like
-         user={user} updateUser={updateUser}/>}/>
+        )}
+        
+        
+        
+        
 
-         <Route path="/checkout" element={<Checkout
-         user={user} updateUser={updateUser}/>}/>
+
       </Routes>
        <Footer/>
     </Router>

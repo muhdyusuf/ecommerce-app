@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 
 function Modal({open,children}) {
  if(!open)return null
+ 
   return createPortal (
     <div className='modal'>
         <p>{children}</p>

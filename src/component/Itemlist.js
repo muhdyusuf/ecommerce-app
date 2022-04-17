@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Modal from './Modal'
 import {useNavigate} from 'react-router-dom'
 
-function Itemlist({data,updateUser,user}) {
+function Itemlist({isLogIn,data,updateUser,user}) {
    const [modal,updateModal]=useState([false,"liked","added"])
 
     function delay(time) {
@@ -12,6 +12,11 @@ function Itemlist({data,updateUser,user}) {
    }
 
     function updateUserCart(val){
+        if(!isLogIn){
+            navigate(`/login`)
+            console.log(isLogIn)
+            return
+        }
         const newUser=user
         
         const isDuplicate=newUser.cart.findIndex(item=>item.id==val.id)
@@ -37,7 +42,12 @@ function Itemlist({data,updateUser,user}) {
 
 
     function updateUserLiked(val){
-        const newUser=user
+        if(!isLogIn){
+            navigate(`/login`)
+            return
+        }
+        else{
+            const newUser=user
         const isDuplicate=newUser.liked.findIndex(item=>item.id==val.id)
         if(isDuplicate<0){
             val.quantity=1
@@ -55,6 +65,9 @@ function Itemlist({data,updateUser,user}) {
        
         updateUser({...newUser})
         
+
+
+        }
 
          
       }
@@ -95,7 +108,8 @@ function Itemlist({data,updateUser,user}) {
 
             )
         )}
-        <Modal open={modal[0]}>{modal}</Modal>
+        <Modal open={modal[0]}>{modal[1]}</Modal>
+        
         
     </div>
   )

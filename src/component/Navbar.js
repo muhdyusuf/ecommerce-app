@@ -5,39 +5,61 @@ import {HiOutlineShoppingCart} from 'react-icons/hi'
 import {BiHeart,BiSearch} from 'react-icons/bi'
 import { useState } from 'react'
 
-function Navbar({user,updateUser}) {
+function Navbar({isLogIn,updateLogin,user}) {
   let navigate=useNavigate()
-   function updateLogin(){
-       updateUser(user=>{
-           const newState={...user}
-           newState.isLoggedIn=false
-           return newState
-       })
-   }
+  
 
    const [userHover,updateHover]=useState(false)
 
-    const userLog=(user)=>{
-        if(user.isLoggedIn){
+    function userLogin(){
+        if(isLogIn){
             return(
                 <div className='user-nav' onClick={()=>updateHover(!userHover)}>
                     <p>{user.name}</p>
                     <div className={userHover? "user-nav-hover active":"user-nav-hover"} onMouseOut={()=>updateHover(!userHover)}>
-                        <div className='user-nav-btn' onClick={updateLogin}>Log out</div>
+                        <div className='user-nav-btn' onClick={()=>updateLogin(false)}>Log out</div>
                     </div>
                 </div>
             )
 
         }
-        else if(!user.isLoggedIn){
+        else if(!isLogIn){
             return(
                 <div className='login-register'>
-                  <p>login/register</p>
+                    <Link to='/login'>Login</Link>
+                    <span> | </span>
+                    <Link to="/register">Register</Link>
                 </div>
             )
         }
 
     }
+  function handleNavigate(path){
+      if(isLogIn){
+          navigate(path)
+        
+      }
+      else{
+          navigate('/login')
+      }
+      
+  }
+  const navIconSpan=(icon)=>{
+      if(icon=="cart"){
+          if(isLogIn)return user.cart.length
+          else{
+              return 0
+          }
+      }
+      else if(icon=="liked"){
+        if(isLogIn)return user.liked.length
+        else{
+            return 0
+        }
+    }
+
+  }
+  
 
   return (
     <nav >
@@ -57,7 +79,7 @@ function Navbar({user,updateUser}) {
                     </select>
                 </div>
                 <div className="log-input">
-                    {userLog(user)}
+                    {userLogin()}
                     
             
 
@@ -83,14 +105,14 @@ function Navbar({user,updateUser}) {
 
             </div>
             <div className="shopping-cart-icon nav-icon"
-            onClick={()=>{navigate(`/shoppingCart`)}} >
+            onClick={()=>handleNavigate('/cart')} >
             <HiOutlineShoppingCart/>
-            <span className={user.cart.length>0? "nav-label active cart-label":"nav-label cart-label"}>{user.cart.length}</span>
+            <span className={navIconSpan("cart")>0? "nav-label active cart-label":"nav-label cart-label"}>{navIconSpan('cart')}</span>
             </div>
             <div className="like-icon nav-icon"
-            onClick={()=>{navigate(`/liked`)}}>
+            onClick={()=>handleNavigate('/liked')}>
             <BiHeart/>
-            <span className={user.liked.length>0? "nav-label active liked-label":"nav-label liked-label"}>{user.liked.length}</span>
+            <span className={navIconSpan("liked")>0? "nav-label active liked-label":"nav-label liked-label"}>{navIconSpan('liked')}</span>
 
             </div>
             
