@@ -30,14 +30,14 @@
   
 }
 .product-rating{
-    color: var(--accent-col);
+    color: var(--color-dark);
     display: flex;
     align-items: center;
     margin: 1rem 0;
     
 }
 .product-rating>:last-child{
-    color: gray;
+    color: var(--color-gray);
     font-size: 14px;
     margin-left: 1rem;
 }
@@ -64,6 +64,9 @@
 .product-quantity>span{
     margin: 0 .8rem ;
 
+}
+.product-desc{
+    padding-bottom:1rem ;
 }
 .quantity-btn{
    height: 100%;
@@ -161,5 +164,15 @@
     margin-bottom: 0;
     padding: 2rem 0;
    
+    
+}
+@media (max-width:768px) {
+    .product-card{
+        display: flex;
+        flex-direction: column;
+    }
+    .product-detail{
+        padding: 1rem;
+    }
     
 }

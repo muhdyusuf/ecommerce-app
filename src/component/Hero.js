@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {GrFormNext} from'react-icons/gr'
+import './Hero.css'
 
 
 function Hero() {

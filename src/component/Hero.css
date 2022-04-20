@@ -1,0 +1,128 @@
+
+.hero{
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+    margin-top: 0;
+    
+}
+
+.hero-slider{
+    width: 100vw;
+    height: auto;
+    
+    aspect-ratio: 16/7;
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    margin: 0;
+   
+   
+}
+.hero-container{
+    position: absolute;
+    top: 0;
+    width: 70%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    pointer-events: none;
+  
+}
+.hero-btn-container{
+    position: absolute;
+    display: flex;
+    left:0;
+    bottom: 2rem;
+    
+}
+.hero-btn{
+    margin: .2rem;
+    font-weight: 900;
+    width: 40px;
+    height: 50px;
+    background-color: transparent;
+    transition: transform ease-in-out .1s;
+    position: relative;
+    pointer-events: all;
+    
+    
+   
+}
+.hero-btn.active{
+    
+   
+    transform: translateY(-1rem);
+    transition: transform ease-in-out .2s,border ease-in-out .2s;
+}
+.hero-btn>span{
+    position: absolute;
+    width: 0;
+    height: 4px;
+    background-color:var(--accent-col);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    transition: width ease-in-out .2s;
+
+}
+.hero-btn.active>span{
+    width: 100%;
+    transition: width ease-in-out .2s;
+}
+
+.hero-img{
+    position: relative;
+    min-width: 100%;
+    min-width: 100%;
+    transform: translateX(var(--hero-slider));
+    transition: transform ease-in-out .3s;
+    
+    
+}
+.hero-img-title{
+    position: absolute;
+    width: 70%;
+    height: 50%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.hero-img>img{
+    min-width: 100%;
+    height: 100%;
+    object-position: center;
+    object-fit: contain;
+    
+    
+}
+.hero-img-btn{
+    cursor: pointer;
+    width: max-content;
+    height: auto;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+
+}
+
+@media (max-width:768px) {
+    .hero-slider,.hero-img>img{
+        object-fit: cover;
+        object-position: center;
+        aspect-ratio: 1/1;
+        
+    }
+  
+    
+}

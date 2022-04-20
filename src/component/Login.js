@@ -36,6 +36,7 @@ function Login({updateLogin}) {
            let isEmail=/[\@\.]/gi.test(e.target.value)
            
            if(isEmail){
+
             const regex=/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
                 if(regex.test(e.target.value)){
                     newIsValid.emailAddress=e.target.value
@@ -46,18 +47,22 @@ function Login({updateLogin}) {
                 }
             } 
             else{
-                console.log(/[a-z0-9_?]/i.test(e.target.value))
+                if(/^[a-z]+_?[0-9a-z]*$/i.test(e.target.value)){
+                    newIsValid.emailAddress=e.target.value
+                }
+                else{
+                    newIsValid.emailAddress=false
+                    newIsValid.emailError="username should start with letter and end with letter or number,only one underscore allowed"
+                }
 
                 
             }
+            updateIsValid({...newIsValid})
 
              
 
            
-            const regex=/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
-            let isTrue=regex.test(e.target.value)
-            
-            isTrue? newIsValid.emailAddress=e.target.value: newIsValid.emailAddress=false
+           
         }
         else if(e.target.name==="password"){
             const regex= /(?=.*[0-9])(?=.*[!@#$%^&*])[a-z0-9!@#$%^&_*]{5,16}/g
@@ -73,32 +78,49 @@ function Login({updateLogin}) {
     }
 
     function signIn(){
-        // if(isValid.emailAddress==true || isValid.emailAddress==false ||
-        //     isValid.password==true || isValid.password==false ) return
-        console.log("signin")
-
-
-        fetch('https://fakestoreapi.com/auth/login',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
-            username: isValid.emailAddress,
-            password: isValid.password
-           })
-        })
-        .then(res=>res.json())
-        .then(json=>{
-            if (!json){
-                console.log("incorrect pass")
-            }
-            else if(json.token){
-                console.log("correct pass")
-                navigate('/')
-                updateLogin(true)
-                
+        if(isValid.emailAddress==true || isValid.emailAddress==false ||
+            isValid.password==true || isValid.password==false ) {
+                let newIsValid=isValid
+                if(newIsValid.emailAddress==true){
+                    newIsValid.emailAddress=false
+                    newIsValid.emailError="Input cannot be empty"
+                }
+                if(newIsValid.password==true){
+                    newIsValid.password=false
+                    newIsValid.passwordError="Input cannot be empty"
+                }
+                updateIsValid({...newIsValid})
+                return
                 
             }
-        })
+            else{
+                fetch('https://fakestoreapi.com/auth/login',{
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({
+                    username: isValid.emailAddress,
+                    password: isValid.password
+                })
+                })
+                .then(res=>res.json())
+                .then(json=>{
+                    if (!json){
+                        console.log("incorrect pass")
+                    }
+                    else if(json.token){
+                        console.log("correct pass")
+                        navigate('/')
+                        updateLogin(true)
+                        
+                        
+                    }
+                })
+            }
+
+        
+
+
+        
         
 
 
@@ -119,7 +141,7 @@ function Login({updateLogin}) {
                <div className="input-container">
                     <input type="text" name='emailAddress' className={isValid.emailAddress? "":"email invalid"} onBlur={(e)=>validation(e)}/>
                     <div className={isValid.emailAddress? "error-message":"error-message display"}>
-                                email or username not valid
+                                {isValid.emailError}
                     </div>
                </div>
                
@@ -131,12 +153,12 @@ function Login({updateLogin}) {
 
                  </div>
                  <div className={isValid.password? "error-message":"error-message display"}>
-                        password must contain atleast 1 uppercase, lowercase and symbol
+                        {isValid.passwordError}
                 </div>
               </div>
                 
                <button className='btn-primary' onClick={signIn}>Sign In</button>
-               <Link to="/register" className='to-register'>OR CREATE AN ACCOUNT</Link>
+               <Link to="/register" className='to-register' >OR CREATE AN ACCOUNT</Link>
             </div>
            
 

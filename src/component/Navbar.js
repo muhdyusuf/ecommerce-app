@@ -4,11 +4,10 @@ import ShoppingCart from './ShoppingCart'
 import {HiOutlineShoppingCart} from 'react-icons/hi'
 import {BiHeart,BiSearch} from 'react-icons/bi'
 import { useState } from 'react'
+import './Navbar.css'
 
 function Navbar({isLogIn,updateLogin,user}) {
   let navigate=useNavigate()
-  const [search,setSearch]=useSearchParams()
-  
 
    const [userHover,updateHover]=useState(false)
 
@@ -73,36 +72,36 @@ function Navbar({isLogIn,updateLogin,user}) {
 
 
   }
+  const [searchbar,openSearch]=useState(false)
   
 
   return (
     <nav >
         <div className="nav-upper">
-            <p>Call Us : 12345678</p>
-            <p>{'Shop Event & Save Up To'}<span> 65% Off</span></p>
+            
             <div className="log-input">
                 {userLogin()}
             </div>
             
             
         </div>
-        <div className="nav-lower"><div className="nav-brand">
-            E-shop<span>.</span>
+        <div className="nav-lower"><div className="nav-brand" onClick={()=>navigate('/')}>
+            E-shop<span className='col-primary'>.</span>
 
-        </div>
+        </div >
         <div className="nav-link">
-           <Link to="/">Home</Link>
-           <Link to="/shop">Shop</Link>
-           <Link to="/blog">Blog</Link>
+           <Link to="/">HOME</Link>
+           <Link to="/shop">SHOP</Link>
+           <Link to="/blog">BLOG</Link>
             
         </div>
         <div className="nav-nav">
-            <div className="nav-input" >
-                <input type="text" onKeyDown={(e)=>handleSearch(e)}  />
-                
-                <BiSearch className='nav-icon'/>
-
+          
+            <div className="nav-searchbar" >
+                <input type="text" onKeyDown={(e)=>handleSearch(e)} className={searchbar? "searchbar active":"searchbar"} />
+                <BiSearch className='nav-icon' onClick={()=>openSearch(!searchbar)}/>
             </div>
+            
             <div className="shopping-cart-icon nav-icon"
             onClick={()=>handleNavigate('/cart')} >
             <HiOutlineShoppingCart/>

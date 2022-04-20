@@ -11,6 +11,7 @@ import Promise from './Promise'
 function Shop({isLogIn,user,updateUser}) {
    const [search,setSearch]=useSearchParams()
    const [dataProps,setdataProps]=useState(["all"])
+   const [filterActive,setFilterActive]=useState(false)
    
     console.log(search.get('search'))
     if(search.get('search') && search.get('search')!==dataProps[1]){
@@ -185,15 +186,18 @@ function Shop({isLogIn,user,updateUser}) {
       <div className="container">
         <div className="shop-header">
           <p>Showing 1-20</p>
+          <button className={filterActive? "filter-btn": "filter-btn active"}
+          onClick={()=>setFilterActive(!filterActive)}>{filterActive? "x":"Filter"}</button>
         </div>
          <div className="shop-container">
+           {filterActive? <div className="filter-background"></div>: "" }
 
-          <div className="shop-category">
+          <div className={filterActive? "shop-category active":"shop-category"}>
                <h1>Filter</h1>
               <div className="sort-by filter-box">
                 <p>Sort by</p>
-                <button onClick={()=>setSorter("highToLow")} className={shopFilter.sorter=="highToLow"? "sorter-btn active": "sorter-btn"} >Price: High to Low</button>
-                <button onClick={()=>setSorter("lowToHigh")} className={shopFilter.sorter=="lowToHigh"? "sorter-btn active": "sorter-btn"}>Price: Low to High</button>
+                <div onClick={()=>setSorter("highToLow")} className={shopFilter.sorter=="highToLow"? "sorter-btn active": "sorter-btn"} >Price: High to Low</div>
+                <div onClick={()=>setSorter("lowToHigh")} className={shopFilter.sorter=="lowToHigh"? "sorter-btn active": "sorter-btn"}>Price: Low to High</div>
               </div>
               <div className="price-range filter-box">
                 <p>Price</p>

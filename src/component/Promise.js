@@ -1,14 +1,12 @@
 import React from 'react'
-import {GrDeliver} from 'react-icons/gr'
-import{AiOutlineCreditCard} from 'react-icons/ai'
-import {BiSupport} from 'react-icons/bi'
-import {BsArrowLeftRight} from 'react-icons/bs'
+
+import {BsArrowLeftRight,BsTruck,BsCreditCard,BsHeadset} from 'react-icons/bs'
 
 function Promise() {
   return (
     <div className="home-promise">
             <div>
-            <GrDeliver className='promise-icon'/>
+            <BsTruck className='promise-icon'/>
             <div className="icon-label">
                 <h4>Free Delivery</h4>
             <p>For Order Over 99$</p>
@@ -26,14 +24,14 @@ function Promise() {
 
             </div>
             <div>
-            <AiOutlineCreditCard className='promise-icon'/>
+            <BsCreditCard className='promise-icon'/>
             <div className="icon-label">
                 <h4>Secure Payment</h4>
                 <p>100% Secure Payment</p>
             </div>
             </div>
             <div>
-            <BiSupport className='promise-icon'/>
+            <BsHeadset className='promise-icon'/>
             <div className="icon-label">
             <h4 >24/7 Support</h4>
             <p>Dedicated Support</p>

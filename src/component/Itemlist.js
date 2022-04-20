@@ -7,7 +7,10 @@ import {useNavigate} from 'react-router-dom'
 import './Itemlist.css'
 
 function Itemlist({dataProps,isLogIn,updateUser,user,shopFilter,length}) {
- 
+  function capitalize(str)
+  {
+    return str[0].toUpperCase() + str.slice(1);
+  }
     const filteredItem=()=>{
         let filteredItem=[...data]
        
@@ -148,7 +151,7 @@ function Itemlist({dataProps,isLogIn,updateUser,user,shopFilter,length}) {
                                <button className='btn' onClick={()=>updateUserCart(item)}>ADD TO CART</button>
                            </div>
                        </div>
-                       <p className="card-title">{item.title}</p>
+                       <p className="card-title">{item.title.toLowerCase().replace(/^\w/, (c) => c.toUpperCase())}</p>
                        <p className="card-price">RM {item.price}</p>
                    </div>
        
@@ -268,9 +271,6 @@ function Itemlist({dataProps,isLogIn,updateUser,user,shopFilter,length}) {
   return (
     <>
     {skeleton()}
-    
-    
-    
     
     </>
     

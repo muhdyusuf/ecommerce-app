@@ -212,6 +212,7 @@ function buyNow(){
                             <div className="product-img ">
                                 <img src={productData.image} alt="" />
                             </div>
+                            
                             <div className="product-detail">
                                 <h3 className='border-bottom'>{productData.title}</h3>
                                 <div className='product-rating'>
@@ -220,7 +221,7 @@ function buyNow(){
                                 
                                 </div>
         
-                                <p className='border-bottom'>{productData.description}</p>
+                                <p className='border-bottom product-desc'>{productData.description}</p>
                                 <h2 >RM{productData.price}</h2>
                                 <div className="product-btn">
                                  <div className="product-quantity">

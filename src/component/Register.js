@@ -10,32 +10,48 @@ function Register() {
         password:true,
         confirmPassword:true,
         seePassword:false,
-        seeConfirmPassword:false  
+        seeConfirmPassword:false,
+        emailAddressError:"",
+        passwordError:"",
+        confirmPasswordError:"" 
     })
   
     function validation(e){
         let newIsValid={...isValid}
         switch (e.target.name){
             case "emailAddress":{
-                console.log("hjkhjk")
+               
                 const regex=/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
                 let isTrue=regex.test(e.target.value)
-                isTrue? newIsValid.emailAddress=e.target.value: newIsValid.emailAddress=false
+                if(isTrue){
+                    newIsValid.emailAddress=e.target.value
+                }
+                else{
+                    newIsValid.emailAddress=false
+                    newIsValid.emailError="email not valid"
+                }
             }
             break
             case "password":{
                 const regex= /(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}/g
                 let isTrue=regex.test(e.target.value)
-                isTrue? newIsValid.password=e.target.value: newIsValid.password=false
+                if(isTrue){
+                    newIsValid.password=e.target.value
+                }
+                else{
+                    newIsValid.password=false
+                    newIsValid.passwordError=" password must contain atleast 1 uppercase, lowercase and symbol"
+                }
                 
             }
             break
             case "confirmPassword":{
                 if(e.target.value===isValid.password){
-                    newIsValid.confirmPassword=true
+                    newIsValid.confirmPassword=e.target.value
                 }
                 else{
                     newIsValid.confirmPassword=false
+                    newIsValid.confirmPasswordError="password not match"
 
                 }
             }
@@ -49,13 +65,30 @@ function Register() {
     }
     function handlePassword(val){
         let newIsValid={...isValid}
-        if(val=="password"){
+        if(val==="password"){
             newIsValid.seePassword=!newIsValid.seePassword
         }
         else{
             newIsValid.seeConfirmPassword=!newIsValid.seeConfirmPassword
         }
         updateIsValid({...newIsValid})
+    }
+    function handleRegister(){
+        let newIsValid={...isValid}
+        Object.keys(newIsValid).map((item,index)=>{
+            if(index<=2 && newIsValid[item]===true){
+                newIsValid[item]=false
+                let name=["Email address","Password","Password"]
+                newIsValid[item+"Error"]=`${name[index]} cannot be empty`
+            }
+
+
+        })
+        updateIsValid({...newIsValid})
+       if( [isValid.emailAddress,isValid.password,isValid.confirmPassword].some(item=>item===false))return
+
+       console.log(`register username: ${isValid.emailAddress} password:${isValid.password}`)
+        
     }
 
   return (
@@ -64,12 +97,12 @@ function Register() {
         <h1>Register</h1>
     </div>
     <div className="container">
-        <form action="" className='login-form'>
+        <div className='login-form'>
         <label>Email address</label>
           <div className="input-container">
                <input type="text" name='emailAddress' className={isValid.emailAddress? "":"email invalid"} onBlur={(e)=>validation(e)}/>
                <div className={isValid.emailAddress? "error-message":"error-message display"}>
-                        email not valid
+                        {isValid.emailAddressError}
                 </div>
           </div>
           
@@ -82,7 +115,7 @@ function Register() {
                      {isValid.seePassword? <AiOutlineEye onClick={()=>handlePassword("password")}/>:<AiOutlineEyeInvisible onClick={()=>handlePassword("password")}/>}
                  </div>
                  <div className={isValid.password? "error-message":"error-message display"}>
-                        password must contain atleast 1 uppercase, lowercase and symbol
+                       {isValid.passwordError}
                 </div>
            </div>
 
@@ -96,13 +129,13 @@ function Register() {
                  </div>
 
                  <div className={isValid.confirmPassword? "error-message":"error-message display"}>
-                        password not match
+                        {isValid.confirmPasswordError}
                 </div>
            </div>
-           <button className='btn-primary'>Register</button>
+           <button className='btn-primary' onClick={handleRegister}>Register</button>
            
            <Link to="/login" className='to-register'>OR LOGIN</Link>
-        </form>
+        </div>
        
 
     </div>
