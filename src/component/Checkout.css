@@ -42,7 +42,7 @@
    padding: 0 .5rem;
 
 }
-.input-item>input{
+.input-item>input,.input-item>select{
     padding: 1rem .5rem;
     border: none;
     background-color: #f5f5f5;

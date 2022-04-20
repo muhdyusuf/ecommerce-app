@@ -1,8 +1,11 @@
 import React from 'react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import {GrFormNext} from'react-icons/gr'
 
 
 function Hero() {
+   let navigate=useNavigate()
      const [currentHero,updateHero]=useState(1)
      
      function changeHero(index){
@@ -25,25 +28,34 @@ function Hero() {
     <div className="hero">
             <div className="hero-slider">
                <div className="hero-img"> 
-                  <img src='https://img.freepik.com/free-psd/ramadan-kareem-sale-banner-template-with-3d-online-shopping-mobile-applications_106244-1476.jpg?w=996&t=st=1649579115~exp=1649579715~hmac=58c0914b869e0a58dd0971a9f9f5fbcce60d9f52cf60dba1859039c04583e509' alt="photo" />
+                  <img src={process.env.PUBLIC_URL + '/img/mock2.png'} alt="photo" />
                   <div className="hero-img-title">
-                     <h2>hallo</h2>
-                  </div>
-               </div>
-               <div className="hero-img">
-                   <img src="https://img.freepik.com/free-photo/portrait-handsome-smiling-stylish-young-man-model-dressed-jeans-clothes-fashion-man_158538-5024.jpg?w=996" alt="" />
-                   <div className="hero-img-title">
-                      <h2>new trend 2022</h2>
-                      <h1>Men's <span className='col-primary'>Collection</span></h1>
-                      <button className='hero-img-btn mt-1'>dfsfdsdf</button>
+                      <h2>Shop Online Exclusive</h2>
+                      <h1>Body <span className='col-primary'>HandBags</span></h1>
+                      <button className='hero-img-btn mt-1'
+                      onClick={(e)=>navigate("/shop/?search=bag")}>SHOP NOW <GrFormNext className='col-primary'/></button>
 
                    </div>
                </div>
                <div className="hero-img">
-                  <img src="https://img.freepik.com/free-photo/black-leather-bag-casual-jacket-jeans-hang-decorative-leather-with-copy-space-fashion_603656-256.jpg?w=1060" alt="" />
+               <img src={process.env.PUBLIC_URL + '/img/mock1.jpg'} alt=""/>
+                   <div className="hero-img-title">
+                      <h2>NEW TREND 2022</h2>
+                      <h1>Women's <span className='col-primary'>Collection</span></h1>
+                      <button className='hero-img-btn mt-1'
+                      onClick={(e)=>navigate("/shop/?category=women's clothing")}
+                      >SHOP NOW <GrFormNext className='col-primary'/></button>
+
+                   </div>
+               </div>
+               <div className="hero-img">
+                  <img src={process.env.PUBLIC_URL + '/img/mock3.png'} alt="" />
                   <div className="hero-img-title">
-                     <h2>hallo</h2>
-                  </div>
+                      <h2>NEW TREND 2022</h2>
+                      <h1>Men's <span className='col-primary'>Collection</span></h1>
+                      <button className='hero-img-btn mt-1' onClick={(e)=>navigate("/shop/?category=men's clothing")}>SHOP NOW <GrFormNext className='col-primary'/></button>
+
+                   </div>
                   
                </div>
                

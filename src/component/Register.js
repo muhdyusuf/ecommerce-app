@@ -12,9 +12,7 @@ function Register() {
         seePassword:false,
         seeConfirmPassword:false  
     })
-    function visible(val){
-
-    }
+  
     function validation(e){
         let newIsValid={...isValid}
         switch (e.target.name){
@@ -67,7 +65,7 @@ function Register() {
     </div>
     <div className="container">
         <form action="" className='login-form'>
-        <label>Username or email address</label>
+        <label>Email address</label>
           <div className="input-container">
                <input type="text" name='emailAddress' className={isValid.emailAddress? "":"email invalid"} onBlur={(e)=>validation(e)}/>
                <div className={isValid.emailAddress? "error-message":"error-message display"}>

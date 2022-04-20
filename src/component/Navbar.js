@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link,useNavigate} from 'react-router-dom'
+import {Link,useNavigate,useSearchParams} from 'react-router-dom'
 import ShoppingCart from './ShoppingCart'
 import {HiOutlineShoppingCart} from 'react-icons/hi'
 import {BiHeart,BiSearch} from 'react-icons/bi'
@@ -7,6 +7,7 @@ import { useState } from 'react'
 
 function Navbar({isLogIn,updateLogin,user}) {
   let navigate=useNavigate()
+  const [search,setSearch]=useSearchParams()
   
 
    const [userHover,updateHover]=useState(false)
@@ -15,7 +16,7 @@ function Navbar({isLogIn,updateLogin,user}) {
         if(isLogIn){
             return(
                 <div className='user-nav' onClick={()=>updateHover(!userHover)}>
-                    <p>{user.name}</p>
+                    <p>hi {user.name}</p>
                     <div className={userHover? "user-nav-hover active":"user-nav-hover"} onMouseOut={()=>updateHover(!userHover)}>
                         <div className='user-nav-btn' onClick={()=>updateLogin(false)}>Log out</div>
                     </div>
@@ -59,6 +60,19 @@ function Navbar({isLogIn,updateLogin,user}) {
     }
 
   }
+  function handleSearch(e){
+      
+      if(e.keyCode==13){
+          let search=e.target.value
+          navigate(`/shop/?search=${e.target.value}`)
+         
+          
+          
+      }
+
+
+
+  }
   
 
   return (
@@ -66,26 +80,11 @@ function Navbar({isLogIn,updateLogin,user}) {
         <div className="nav-upper">
             <p>Call Us : 12345678</p>
             <p>{'Shop Event & Save Up To'}<span> 65% Off</span></p>
-            <div className="nav-upper-input">
-                <div className="language-input">
-                   <label htmlFor="language"></label>
-                   <select name="language" id="">
-                    <option value="english">English</option>
-                    </select> 
-                </div>
-                <div className="currency-input">
-                    <select name="currency" id="">
-                        <option value="usd">USD</option>
-                    </select>
-                </div>
-                <div className="log-input">
-                    {userLogin()}
-                    
-            
-
-                </div>
-                
+            <div className="log-input">
+                {userLogin()}
             </div>
+            
+            
         </div>
         <div className="nav-lower"><div className="nav-brand">
             E-shop<span>.</span>
@@ -98,8 +97,8 @@ function Navbar({isLogIn,updateLogin,user}) {
             
         </div>
         <div className="nav-nav">
-            <div className="nav-input">
-                <input type="text" className='nav-searchbar' />
+            <div className="nav-input" >
+                <input type="text" onKeyDown={(e)=>handleSearch(e)}  />
                 
                 <BiSearch className='nav-icon'/>
 

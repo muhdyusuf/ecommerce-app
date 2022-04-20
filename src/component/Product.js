@@ -1,28 +1,45 @@
 import React from 'react'
 import './Product.css'
-import{useParams} from "react-router-dom"
+import{useParams,useNavigate} from "react-router-dom"
 import { useEffect,useState } from 'react'
 import {AiFillStar,AiOutlineStar} from 'react-icons/ai'
 import{TiMinus,TiPlus} from 'react-icons/ti'
 import Modal from './Modal'
 import {FaHeart,FaRegHeart} from 'react-icons/fa'
+import Itemlist from './Itemlist'
+import Newsletter from './Newsletter'
+import Promise from './Promise'
 
-function Product( {data,user,updateUser}) {
+
+function Product( {isLogIn,user,updateUser}) {
+let navigate=useNavigate()
 const {productId}=useParams()
-const [productData,updateProductData]=useState()
+const [productData,updateProductData]=useState(null)
+
 
 
 useEffect(()=>{
-    fetch(`https://fakestoreapi.com/products/${productId}`)
-    .then(res=>res.json())
-    .then(json=>{
-        json.quantity=1
-        updateProductData({...json})
+    if(productData===null || productData && productData.id !== productId){
+        updateProductData(null)
+        fetch(`https://fakestoreapi.com/products/${productId}`)
+        .then(res=>res.json())
+        .then(json=>{
+            if(json==null){
+                updateProductData(undefined)
+                console.log(productData)
+            
+            }
+            else{
+                json.quantity=1
+                updateProductData({...json})
+            }
         
     })
+    }
+    
     
   
-   },[])
+   },productId)
 
 
 const productRating=()=>{
@@ -131,6 +148,17 @@ function updateUserLiked(val){
     }
 
 }
+function buyNow(){
+   
+    let newUser={...user}
+    newUser.checkout=[productData]
+    updateUser({...newUser})
+    navigate('/checkout')
+    
+   
+
+
+}
 
 
 
@@ -138,14 +166,49 @@ function updateUserLiked(val){
     <section className='product'>
         <div className="container">
             {(function (){
-                if(!productData){
+                if(productData===undefined){
                     return(
-                        <div className='product-not-exist'>product not exist</div>
+                        <div className='product-not-exist'>
+                         <p className='fs15'>Product not Exist</p>
+                         <button onClick={()=>navigate('/shop')}>Browse other product</button>
+                        
+                        </div>
+                    )
+                }
+                else if(productData===null){
+                    return(
+                        <div className="product-card">
+                            <div className="product-img ">
+                               
+                            </div>
+                            <div className="product-detail">
+                                <h3 className='border-bottom skeleton'></h3>
+                                <div className='product-rating skeleton'>
+                                
+                                </div>
+        
+                                <p className='border-bottom product-desc skeleton'></p>
+                                <p className='border-bottom product-desc skeleton'></p>
+                                <p className='border-bottom product-desc skeleton'></p>
+
+                                <h2 className='skeleton product-price'></h2>
+                                <div className="product-btn">
+                                 <div className="product-quantity skeleton">
+                                   
+                                 </div>
+                                 <button className='skeleton'></button>
+                                 <button className='skeleton'></button>
+                            
+                                </div>
+                            </div>
+                            
+                        </div>
                     )
                 }
                 else{
                 return(
-                    <div className="product-card">
+                   <>
+                     <div className="product-card border-bottom">
                             <div className="product-img ">
                                 <img src={productData.image} alt="" />
                             </div>
@@ -166,12 +229,21 @@ function updateUserLiked(val){
                                      <button className='quantity-btn add' onClick={()=>updateQuantity("plus")}><TiPlus/></button>
                                  </div>
                                  <button onClick={()=>updateUserCart(productData)}>Add to cart</button>
-                                 <button >Buy Now</button>
+                                 <button onClick={buyNow}>Buy Now</button>
                                  {isLiked(productData)}
                                 </div>
                             </div>
                             
                         </div>
+                        <div className="related-product border-bottom">
+                            <h1 className='fs2'>Related Product</h1>
+                            <Itemlist isLogIn={isLogIn}  dataProps={["category",productData.category]} updateUser={updateUser} user={user} length={4}/>
+                        </div>
+                        
+                        <Newsletter/>
+                        <Promise/>
+                    
+                    </>
                 )
             }
             })()}

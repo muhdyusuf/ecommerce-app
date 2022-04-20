@@ -1,12 +1,13 @@
 import React from 'react'
-import {GrDeliver} from 'react-icons/gr'
-import{AiOutlineCreditCard} from 'react-icons/ai'
-import {BiSupport} from 'react-icons/bi'
-import {BsArrowLeftRight} from 'react-icons/bs'
+
 import {BiHeart} from 'react-icons/bi'
 import {useState} from 'react'
 import Hero from './Hero'
 import Itemlist from './Itemlist'
+import Newsletter from './Newsletter';
+import Promise from './Promise'
+import PromoBox from './PromoBox'
+
 
 
 function Home({isLogIn,data,user,updateUser}) {
@@ -39,47 +40,35 @@ function Home({isLogIn,data,user,updateUser}) {
   return (
     <>
         <Hero/>
+        <div className="promo">
+                
+                
+                <div  style={{background:`url(${process.env.PUBLIC_URL + '/img/home.png'}) center/cover no-repeat`}}>
+                    <div>
+                    <h3>Mid Season<br/>Sale Up To <br/> 50% Off</h3>
+                    <button className='promo-btn'>Shop Now</button>
+                    </div>
+                </div>
+                <div  style={{background:`url(${process.env.PUBLIC_URL + '/img/home2.png'}) center/cover no-repeat`}}>
+                   <div>
+                   <h3>20% Of<br/>All Accesories</h3>
+                    <button className='promo-btn'>Shop Now</button>
+                   </div>
+                </div>
+                <div  style={{background:`url(${process.env.PUBLIC_URL + '/img/home3.png'}) center/cover no-repeat`}}>
+                    <div>
+                    <h3>Summer<br/>Fashion Sale<br/>Up To 30% Off</h3>
+                    <button className='promo-btn'>Shop Now</button>
+                    </div>
+                    
+                </div>
+                
+                
+            </div>
         <section>
             <div className="container">
-            <div className="home-promise">
-            <div>
-            <GrDeliver className='promise-icon'/>
-            <div className="icon-label">
-                <h4>Free Delivery</h4>
-            <p>For Order Over 99$</p>
- 
-            </div>
+            
            
-            </div>
-            <div>
-            <BsArrowLeftRight className='promise-icon'/>
-            <div className="icon-label">
-                   <h4>30 Days Return</h4>
-            <p>If Goods Have Problem</p>
-            </div>
-         
-
-            </div>
-            <div>
-            <AiOutlineCreditCard className='promise-icon'/>
-            <div className="icon-label">
-                <h4>Secure Payment</h4>
-                <p>100% Secure Payment</p>
-            </div>
-            </div>
-            <div>
-            <BiSupport className='promise-icon'/>
-            <div className="icon-label">
-            <h4 >24/7</h4>
-            <p>Dedicated Support</p>
-            </div>
-
-            </div>
-
-            
-            
-
-        </div>
         <div className="featured-product">
             <div className="featured-button-container">
                 <div className={currentslide=="newArrival"?"featured-btn active":"featured-btn"} onClick={()=>changeCarousel("newArrival")}>New Arrival</div>
@@ -88,33 +77,18 @@ function Home({isLogIn,data,user,updateUser}) {
                 <span></span>
             </div>
             <div className="featured-group">
-                <Itemlist isLogIn={isLogIn}  data={data} updateUser={updateUser} user={user} />
-                <Itemlist isLogIn={isLogIn}  data={data} updateUser={updateUser} user={user}/>
-                <Itemlist isLogIn={isLogIn}  data={data} updateUser={updateUser} user={user}/>
+                <Itemlist isLogIn={isLogIn}  dataProps={["category","men's clothing"]} updateUser={updateUser} user={user} length={4}/>
+                <Itemlist isLogIn={isLogIn}  dataProps={["category","women's clothing"]} updateUser={updateUser} user={user} length={4}/>
+                <Itemlist isLogIn={isLogIn}  dataProps={["category","jewelery"]} updateUser={updateUser} user={user} length={4}/>
                 
             </div>
             <div className="shop-button">
                 <div className="btn go-to-btn">Go to Shop</div>
             </div>
-            <div className="promo">
-                <div className="promo1" >
-                    <h2>Mid season<br></br>up to 50% off</h2>
-                    <a href="">Shop Now</a>
-                </div>
-                <div className="promo1" style={{background:"url('https://img.freepik.com/free-psd/bag-mockup_58466-17102.jpg?t=st=1649584392~exp=1649584992~hmac=f65206636cbff15e439a0ed6731be0eb74448bb385ab5e261a94c9503b70fdf6&w=996') center",backgroundSize:"cover"}}>
-                    <h2>HandBag<br></br>up to 30% off</h2>
-                    <a href="">Shop Now</a>
-                </div>
-            </div>
-            <div className="newsletter">
-                <h2>Subscribe To our Newsletter</h2>
-                <p className='mt-1'>Subscribe to our Newsletter and get 10% off on your first purchase</p>
-                <form action="" className='newsletter-form'>
-                    <input type="email" placeholder='Your Email'/>
-                    <button type="submit">Subscribe</button>
-                </form>
-                
-           </div>
+            <Promise/>
+            
+           <Newsletter/>
+          
             
         </div>
             </div>

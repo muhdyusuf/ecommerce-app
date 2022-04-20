@@ -12,7 +12,10 @@ function Login({updateLogin}) {
     const [isValid,updateIsValid]=useState({
         emailAddress:true,
         password:true,
-        seePassword:false
+        seePassword:false,
+        emailError:"",
+        passwordError:""
+
         
     })
     function handlePassword(val){
@@ -29,10 +32,31 @@ function Login({updateLogin}) {
         let newIsValid={...isValid}
         
         if(e.target.name=="emailAddress"){
-            // console.log("hjkhjk")
-            // const regex=/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
-            // let isTrue=regex.test(e.target.value)
-            let isTrue=true
+
+           let isEmail=/[\@\.]/gi.test(e.target.value)
+           
+           if(isEmail){
+            const regex=/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+                if(regex.test(e.target.value)){
+                    newIsValid.emailAddress=e.target.value
+                }
+                else{
+                    newIsValid.emailAddress=false
+                    newIsValid.emailError="email not valid"
+                }
+            } 
+            else{
+                console.log(/[a-z0-9_?]/i.test(e.target.value))
+
+                
+            }
+
+             
+
+           
+            const regex=/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+            let isTrue=regex.test(e.target.value)
+            
             isTrue? newIsValid.emailAddress=e.target.value: newIsValid.emailAddress=false
         }
         else if(e.target.name==="password"){
@@ -69,8 +93,9 @@ function Login({updateLogin}) {
             }
             else if(json.token){
                 console.log("correct pass")
+                navigate('/')
                 updateLogin(true)
-                navigate('')
+                
                 
             }
         })
@@ -90,11 +115,11 @@ function Login({updateLogin}) {
         </div>
         <div className="container">
             <div className='login-form'>
-               <label>Username or email address</label>
+            <label>Username or email address</label>
                <div className="input-container">
                     <input type="text" name='emailAddress' className={isValid.emailAddress? "":"email invalid"} onBlur={(e)=>validation(e)}/>
                     <div className={isValid.emailAddress? "error-message":"error-message display"}>
-                                email not valid
+                                email or username not valid
                     </div>
                </div>
                

@@ -1,11 +1,185 @@
-import React from 'react'
+import {React,useEffect} from 'react'
+
 import {FaHeart,FaRegHeart} from 'react-icons/fa'
 import { useState } from 'react'
 import Modal from './Modal'
 import {useNavigate} from 'react-router-dom'
+import './Itemlist.css'
 
-function Itemlist({isLogIn,data,updateUser,user}) {
-   const [modal,updateModal]=useState([false,"liked","added"])
+function Itemlist({dataProps,isLogIn,updateUser,user,shopFilter,length}) {
+ 
+    const filteredItem=()=>{
+        let filteredItem=[...data]
+       
+        if(!shopFilter) return filteredItem
+        if(shopFilter.min!==""){
+          filteredItem=filteredItem.filter(item=>{
+            if(item.price>=shopFilter.min && item.price<=shopFilter.max) return true
+            else{
+                return false
+            }
+          })
+        }
+        
+        if(shopFilter.category.length>0){
+          filteredItem=filteredItem.filter(item=>{
+            let isTrue=shopFilter.category.some(filter=>item.category==filter)
+            if(isTrue)return true
+            return false
+
+          })
+        }
+  
+        if(shopFilter.rating){
+          filteredItem=filteredItem.filter(item=>{
+            if(item.rating.rate>=shopFilter.rating) return true
+            return false
+          })
+        }
+        if(shopFilter.sorter=="lowToHigh"){
+          filteredItem=filteredItem.sort((a,b)=>a.price-b.price)
+        }
+        if(shopFilter.sorter=="highToLow"){
+          filteredItem=filteredItem.sort((a,b)=>b.price-a.price)
+        }
+   
+     
+       return filteredItem
+  
+      }
+
+   const [modal,updateModal]=useState([false,""])
+   const [data,updateData]=useState(null)
+
+   useEffect(()=>{
+     updateData(null)
+       if(dataProps[0]=="all"){
+        fetch('https://fakestoreapi.com/products')
+        .then(res=>res.json())
+        .then(json=>updateData(json))
+       }
+       else if(dataProps[0]=="category"){
+        fetch(`https://fakestoreapi.com/products/category/${dataProps[1]}`)
+        .then(res=>res.json())
+        .then(json=>{
+          console.log(json)
+
+          if (length && json.length>length){
+            json.splice(length)
+            console.log(json)
+          }
+          
+          updateData(json)})
+
+       }
+       else if(dataProps[0]=="search"){
+        let search
+        fetch('https://fakestoreapi.com/products')
+        .then(res=>res.json())
+        .then(json=>{
+          search=json
+          
+          search=search.filter(item=>{
+            const obj=Object.values(item)
+            let regex=new RegExp(dataProps[1],'gi')
+            let isTrue=obj.some(item=>regex.test(item))
+            if(isTrue)return true
+            return false
+          })
+          console.log(search)
+          if(search.length==0){
+            updateData([])
+          }
+          else{
+            updateData([...search])
+          }
+
+
+        })
+
+       }
+       
+
+   },dataProps)
+
+   const skeleton=()=>{
+     if(data===null|| !data){
+      let skeleton=[]
+      let skeletonLength=length? length : 20
+      for(let i=0;i<skeletonLength;i++){
+          skeleton.push(
+            <div key={i} className="card"  >
+                <div className="card-img skeleton">
+
+                </div>
+                <p className="card-title skeleton"></p>
+                <p className="card-price skeleton"></p>
+             </div>
+          )
+      }
+      return (
+        <div className='grid'>
+          {skeleton}
+        </div>
+      )
+     }
+     else if(data.length===0){
+       if(dataProps[0]==="search"){
+         return(
+           <div>
+             <p>No item for keyword '{dataProps[1]}'</p>
+           </div>
+         )
+       }
+     }
+     else{
+       
+       return(
+         <>{filteredItem().length>0 ? (
+          <div className=" grid">
+       
+          {
+               filteredItem().map(item=>(
+                   <div key={item.id} className="card"  >
+                       <div className="card-img">
+                           <img src={item.image} alt="" onClick={()=>{navigate(`/product/${item.id}`)}} />
+                           <div className="img-hover" >
+                               {isLiked(item)}
+                               <button className='btn' onClick={()=>updateUserCart(item)}>ADD TO CART</button>
+                           </div>
+                       </div>
+                       <p className="card-title">{item.title}</p>
+                       <p className="card-price">RM {item.price}</p>
+                   </div>
+       
+                   )
+               )
+          }
+          
+   
+   
+   
+          
+           <Modal open={modal[0]}>{modal[1]}</Modal>
+           
+           
+       </div>
+         ) :
+         (
+           <div>
+             <p>no item match filter</p>
+           </div>
+         )}
+         </>
+         
+         
+        
+
+       )
+     }
+    
+   }
+   
 
     function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
@@ -92,26 +266,14 @@ function Itemlist({isLogIn,data,updateUser,user}) {
    
 
   return (
-    <div className=" grid">
-        {data.map(item=>(
-            <div key={item.id} className="card"  >
-                <div className="card-img">
-                    <img src={item.image} alt="" onClick={()=>{navigate(`/product/${item.id}`)}} />
-                    <div className="img-hover" >
-                        {isLiked(item)}
-                        <button className='btn' onClick={()=>updateUserCart(item)}>ADD TO CART</button>
-                    </div>
-                </div>
-                <p className="card-title">{item.title}</p>
-                <p className="card-price">RM {item.price}</p>
-            </div>
-
-            )
-        )}
-        <Modal open={modal[0]}>{modal[1]}</Modal>
-        
-        
-    </div>
+    <>
+    {skeleton()}
+    
+    
+    
+    
+    </>
+    
   )
 }
 

@@ -1,11 +1,24 @@
 import React from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import {GoAlert} from 'react-icons/go'
 
 function ErrorPage(isLogIn) {
  let navigate=useNavigate
+
  
   return (
-    <div>ErrorPage</div>
+    <section>
+      <div className="container">
+        <div className="error-container">
+        <GoAlert style={{fontSize:"6em",color:"red"}}/>
+        <h1 className='fs3 mt-1'>Page not found</h1>
+        <h2 className='mt-1'>Please go back a previous page or {<Link to="/">Homepage</Link>}</h2>
+
+        </div>
+       
+
+      </div>
+    </section>
   )
 }
 

@@ -1,25 +1,235 @@
 import React, { useState,useEffect } from 'react'
+import {useNavigate} from 'react-router-dom'
 import './Checkout.css'
 
 
 function Checkout({user}) {
-    let stateList=[]
-    useEffect(()=>{},[
-        fetch('https://jianliew.me/malaysia-api/state/v1/all.json')
-        .then(res=>res.json())
-        .then(json=>{
-            json.map(item=>{
-            stateList.push(item.state.replace(/\s/g,"").toLowerCase())
-        })
-        console.log(stateList)
-       })
-    ])
+    let navigate=useNavigate()
+    if(user.checkout.length==0){
+        navigate('/shop')
+    }
     
+    
+   
 
+    const [userAddress,updateAddress]=useState(
+        {
+            country:"Malaysia",
+            postcode:null,
 
+        }
+    )
+   
 
-
-
+    const allState={
+        "Johor": [
+            "Johor Bahru",
+            "Tebrau",
+            "Pasir Gudang",
+            "Bukit Indah",
+            "Skudai",
+            "Kluang",
+            "Batu Pahat",
+            "Muar",
+            "Ulu Tiram",
+            "Senai",
+            "Segamat",
+            "Kulai",
+            "Kota Tinggi",
+            "Pontian Kechil",
+            "Tangkak",
+            "Bukit Bakri",
+            "Yong Peng",
+            "Pekan Nenas",
+            "Labis",
+            "Mersing",
+            "Simpang Renggam",
+            "Parit Raja",
+            "Kelapa Sawit",
+            "Buloh Kasap",
+            "Chaah"
+          ],
+          "Kedah": [
+            "Sungai Petani",
+            "Alor Setar",
+            "Kulim",
+            "Jitra / Kubang Pasu",
+            "Baling",
+            "Pendang",
+            "Langkawi",
+            "Yan",
+            "Sik",
+            "Kuala Nerang",
+            "Pokok Sena",
+            "Bandar Baharu"
+          ],
+          "Kelantan": [
+            "Kota Bharu",
+            "Pangkal Kalong",
+            "Tanah Merah",
+            "Peringat",
+            "Wakaf Baru",
+            "Kadok",
+            "Pasir Mas",
+            "Gua Musang",
+            "Kuala Krai",
+            "Tumpat"
+          ],
+          "Melaka": [
+            "Bandaraya Melaka",
+            "Bukit Baru",
+            "Ayer Keroh",
+            "Klebang",
+            "Masjid Tanah",
+            "Sungai Udang",
+            "Batu Berendam",
+            "Alor Gajah",
+            "Bukit Rambai",
+            "Ayer Molek",
+            "Bemban",
+            "Kuala Sungai Baru",
+            "Pulau Sebang",
+            "Jasin"
+          ],
+          "Negeri Sembilan": [
+            "Seremban",
+            "Port Dickson",
+            "Nilai",
+            "Bahau",
+            "Tampin",
+            "Kuala Pilah"
+          ],
+          "Pahang": [
+            "Kuantan",
+            "Temerloh",
+            "Bentong",
+            "Mentakab",
+            "Raub",
+            "Jerantut",
+            "Pekan",
+            "Kuala Lipis",
+            "Bandar Jengka",
+            "Bukit Tinggi"
+          ],
+          "Perak": [
+            "Ipoh",
+            "Taiping",
+            "Sitiawan",
+            "Simpang Empat",
+            "Teluk Intan",
+            "Batu Gajah",
+            "Lumut",
+            "Kampung Koh",
+            "Kuala Kangsar",
+            "Sungai Siput Utara",
+            "Tapah",
+            "Bidor",
+            "Parit Buntar",
+            "Ayer Tawar",
+            "Bagan Serai",
+            "Tanjung Malim",
+            "Lawan Kuda Baharu",
+            "Pantai Remis",
+            "Kampar"
+          ],
+          "Perlis": [
+            "Kangar",
+            "Kuala Perlis"
+          ],
+          "Pulau Pinang": [
+            "Bukit Mertajam",
+            "Georgetown",
+            "Sungai Ara",
+            "Gelugor",
+            "Ayer Itam",
+            "Butterworth",
+            "Perai",
+            "Nibong Tebal",
+            "Permatang Kucing",
+            "Tanjung Tokong",
+            "Kepala Batas",
+            "Tanjung Bungah",
+            "Juru"
+          ],
+          "Sabah": [
+            "Kota Kinabalu",
+            "Sandakan",
+            "Tawau",
+            "Lahad Datu",
+            "Keningau",
+            "Putatan",
+            "Donggongon",
+            "Semporna",
+            "Kudat",
+            "Kunak",
+            "Papar",
+            "Ranau",
+            "Beaufort",
+            "Kinarut",
+            "Kota Belud"
+          ],
+          "Sarawak": [
+            "Kuching",
+            "Miri",
+            "Sibu",
+            "Bintulu",
+            "Limbang",
+            "Sarikei",
+            "Sri Aman",
+            "Kapit",
+            "Batu Delapan Bazaar",
+            "Kota Samarahan"
+          ],
+          "Selangor": [
+            "Subang Jaya",
+            "Klang",
+            "Ampang Jaya",
+            "Shah Alam",
+            "Petaling Jaya",
+            "Cheras",
+            "Kajang",
+            "Selayang Baru",
+            "Rawang",
+            "Taman Greenwood",
+            "Semenyih",
+            "Banting",
+            "Balakong",
+            "Gombak Setia",
+            "Kuala Selangor",
+            "Serendah",
+            "Bukit Beruntung",
+            "Pengkalan Kundang",
+            "Jenjarom",
+            "Sungai Besar",
+            "Batu Arang",
+            "Tanjung Sepat",
+            "Kuang",
+            "Kuala Kubu Baharu",
+            "Batang Berjuntai",
+            "Bandar Baru Salak Tinggi",
+            "Sekinchan",
+            "Sabak",
+            "Tanjung Karang",
+            "Beranang",
+            "Sungai Pelek"
+          ],
+          "Terengganu": [
+            "Kuala Terengganu",
+            "Chukai",
+            "Dungun",
+            "Kerteh",
+            "Kuala Berang",
+            "Marang",
+            "Paka",
+            "Jerteh"
+          ],
+          "Wilayah Persekutuan": [
+            "Kuala Lumpur",
+            "Labuan",
+            "Putrajaya"
+          ]
+        }
+ 
 
     const [form,updateForm]=useState({
         firstName:true,
@@ -27,24 +237,24 @@ function Checkout({user}) {
         emailAddress:true,
         phone:true,
         address:true,
-        townCity:true,
-        stateProvince:true,
-        country:true,
+        townCity:"Johor Bahru",
+        stateProvince:"Johor",
+        country:"Malaysia",
         postcodeZip:true,
-        orderNote:true,
+        orderNote:"",
 
     })
     
-    let camelize=(str)=> {
-        let newStr=str.replace(/[\/*]/g,"")
-        return newStr.replace(/(?:^\w|[A-Z]|\b\w )/g, function(word, index) {
-          return index === 0 ? word.toLowerCase() : word.toUpperCase();
-        }).replace(/[\s]+/g, '');
-      }
 
+    const getCity=()=>{
+        if(form.stateProvince===true)return []
+        else{
+            return allState[form.stateProvince]
+        }
+    }
+    console.log(getCity())
    
-    
-    let ewallet=100.0
+   
     const totalPrice=user.checkout.reduce((total,item)=>item.price*item.quantity+total
     ,0)
     const shippingPrice=user.checkout.reduce((total,item)=>8+total,0)
@@ -83,11 +293,18 @@ function Checkout({user}) {
             }
             break;
             case "stateProvince":{
-                const regex=e.target.value.replace(/\s/g,"").toLowerCase()
-                let isTrue=stateList.some(item=>item==regex)
-                isTrue? newForm.stateProvince=regex:newForm.stateProvince=false
-                console.log(newForm.stateProvince)
+                newForm.stateProvince=e.target.value
+               
                 
+            }
+            case "TownCity":{
+                newForm.townCity=e.target.value
+
+            }
+            case "address":{
+                newForm.address=e.target.value
+                
+
             }
 
             break;
@@ -112,76 +329,30 @@ function Checkout({user}) {
                 const regex=/^[a-z]+$/i
                 let isTrue=regex.test(e.target.value)
                 isTrue? newForm.lastName=e.target.value:newForm.lastName=false
-                console.log(newForm.lastName)
+                console.log(newForm)
                 
             }
             break;
-            case "townCity":{
-                const regex=/^[A-Za-z]$/i
-                let isTrue=regex.test(e.target.value)
-                isTrue? newForm.lastName=e.target.value:newForm.lastName=false
-                console.log(newForm.lastName)
-                
-            }
-            break;
+            
 
 
         }
         updateForm({...newForm})
 
     }
-    const inputList=()=>{
-        const input=[
-            {
-                name:"First Name",
-                className:"input-item"
-            },
-            {
-                name:"Last Name",
-                className:"input-item"
-            },
-            {
-                name:"Email Address",
-                className:"span input-item"
-            },
-            {
-                name:"Phone",
-                className:"span input-item"
-            },
-            {
-                name:"Address",
-                className:"span input-item"
-            },
-            {
-                name:"Country",
-                className:"input-item"
-            },
-            {
-                name:"State/Province",
-                className:"input-item"
-            },
-            {
-                name:"Town/City",
-                className:"input-item"
-                
-            },
-            {
-                name:"Postcode/Zip",
-                className:"input-item"
-            },
-            
-        ]
-       return input.map(item=>{
-            return(
-                <div className={form[camelize(item.name)] ? item.className:`${item.className} invalid`} key={item.name}>
-                    <label>{item.name}</label>
-                    <input type="text" name={camelize(item.name)} onBlur={(e)=>updateInput(e)}/>
-
-                </div>
-            )
-        })
-        
+    function placeOrder(){
+        if(Object.values(form).some(item=>item===true)){
+            let newForm=form
+            Object.keys(newForm).map(item=>{
+                if(newForm[item]==true){
+                    newForm[item]=false
+                }
+            })
+            updateForm({...newForm})
+        }
     }
+
+     
     
 
 
@@ -197,12 +368,89 @@ function Checkout({user}) {
                 <div className="billing-form">
                     <h3>Billing address</h3>
                     <div className="billing-input">
-                        {inputList()}
-                        <div className="input-item span">
+                        <div className={form.firstName ? "input-item":`input-item invalid`} >
+                        <label>First Name</label>
+                        <input type="text" name="firstName" onBlur={(e)=>updateInput(e)}/>
+
+                        </div>
+                        <div className={form.lastName ? "input-item":`input-item invalid`} >
+                        <label>Last Name</label>
+                        <input type="text" name="lastName" onBlur={(e)=>updateInput(e)}/>
+
+                        </div>
+                        <div className={form.emailAddress ? "input-item span":`input-item invalid span`} >
+                        <label>Email address</label>
+                        <input type="text" name="emailAddress" onBlur={(e)=>updateInput(e)}/>
+
+                        </div>
+                        <div className={form.phone ? "input-item span":`input-item invalid span`} >
+                        <label>Phone</label>
+                        <input type="text" name="phone" onBlur={(e)=>updateInput(e)}/>
+
+                        </div>
+                        <div className={form.address ? "input-item span":`input-item invalid span`} >
+                        <label>Address</label>
+                        <input type="text" name="address" onBlur={(e)=>updateInput(e)}/>
+
+                        </div>
+
+                        <div className={form.country ? "input-item":`input-item invalid`} >
+                        <label>Country</label>
+                        <input type="text" name="country" onBlur={(e)=>updateInput(e)} value={userAddress.country} readOnly />
+
+                        </div>
+
+                        <div className="input-item" >
+                        <label>State/Province</label>
+                        <select name="stateProvince" onChange={(e)=>updateInput(e)}>
+                            {Object.keys(allState).map(item=>{
+                                return(
+                                    <option key={item} value={item} >{item}</option>
+
+                                )
+                                     
+
+                            })}
+                        </select>
+                        
+
+                        </div>
+
+                        <div className="input-item" >
+                        <label>City/Town</label>
+                        <select name="TownCity" onChange={(e)=>updateInput(e)}>
+                            {getCity().map(item=>{
+                                return(
+                                    <option key={item} value={item} >{item}</option>
+
+                                )
+                                     
+
+                            })}
+                        </select>
+                        
+
+                        </div>
+
+                        <div className={form.postcodeZip ? "input-item":`input-item invalid`} >
+                        <label>Postcode/Zip</label>
+                        <input type="text" name="postcodeZip" onBlur={(e)=>updateInput(e)}/>
+
+                        </div>
+                        
+                        
+                        
+
+
+
+
+
+                       
+                    <div className="input-item span">
                     <label>Order Note</label>
                     <textarea type="text" name="orderNote" onBlur={(e)=>updateInput(e)}/>
 
-                </div>
+                     </div>
                     
                     </div>
                     
@@ -237,7 +485,7 @@ function Checkout({user}) {
                             <h3>Order total</h3>
                             <p className='col-primary'>RM {totalPrice+shippingPrice}</p>
                         </div>
-                        <button className='btn-primary'>Place Order</button>
+                        <button className='btn-primary' onClick={placeOrder}>Place Order</button>
                     </div>
 
                
