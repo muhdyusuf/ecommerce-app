@@ -62,3 +62,9 @@
     grid-template-columns: 1fr .7fr;
     gap: 3rem;
 }
+@media (max-width:768px) {
+    .checkout-container{
+        grid-template-columns: 1fr;
+    }
+    
+}

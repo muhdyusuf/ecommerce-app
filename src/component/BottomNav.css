@@ -1,0 +1,76 @@
+.bottom-nav{
+    display: none;
+}
+@media (max-width:576px) {
+    body{
+        padding-bottom: 3rem;
+        
+    }
+    .bottom-nav{
+        position: fixed;
+        bottom: 0;
+        height: max-content;
+        display: flex;
+        grid-template-columns: repeat(4,1fr);
+        width: 100%;
+        padding: 0 1rem;
+        background-color: white;
+        color: gray;
+        z-index: 10000;
+    }
+    .bottom-nav>div>:first-child{
+        font-size: 1.5rem;
+       z-index: 3;
+    }
+    .bottom-nav>div{
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        padding: .5rem 0;
+        overflow: hidden;
+        z-index: 1;
+        
+      
+    }
+    .bottom-nav>div:before{
+        position: absolute;
+        content: "";
+        opacity: 0;
+        height: 150%;
+        width: 100%;
+        transform: scale(0);
+        border-radius: 50%;
+        background-color: #f5f5f5;
+        z-index: 2;
+        transition: transform ease-in .3s,opacity ease-in .3s;
+        
+    }
+    .bottom-nav>div:active:before{
+        position: absolute;
+        content: "";
+        opacity: 1;
+        height: 150%;
+        width: 100%;
+        transform: scale(1);
+        border-radius: 50%;
+        background-color: #f5f5f5;
+        z-index: 2;
+        transition: transform ease-in-out .1s,opacity ease-in-out .1s;
+    }
+    .bottom-nav>div.active{
+        color: var(--accent-col);
+        transform: scale(1.05);
+        font-weight: 900;
+        transition: transform ease-in .3s;
+    }
+    .bottom-nav>div>p{
+        font-size: .6rem;
+        text-align: center;
+        z-index: 3;
+    }
+    
+    
+}

@@ -12,6 +12,7 @@ import Checkout from './component/Checkout';
 import Login from './component/Login';
 import Register from './component/Register';
 import ErrorPage from './component/ErrorPage';
+import BottomNav from './component/BottomNav';
 
 
 
@@ -100,6 +101,7 @@ function App() {
 
       </Routes>
        <Footer/>
+       <BottomNav/>
     </Router>
    
 
