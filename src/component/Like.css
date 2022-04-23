@@ -2,7 +2,6 @@
     margin: 3rem 0;
 }
 .liked-container.no-item{
-    margin: 2rem ;
     display: flex;
     justify-content: center;
 }
@@ -64,4 +63,35 @@
 .liked-item>p:nth-of-type(2){
     font-weight: 600;
 
+}
+@media (max-width:576px) {
+    .liked-container-header{
+        grid-template-columns: 4fr 1fr;
+        
+    }
+    .liked-img{
+        display: none;
+    }
+    .cart-price{
+        max-height: 34px;
+        overflow: hidden;
+        grid-area: price;
+    }
+    .liked-item{
+        grid-template-columns: 4fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        grid-template-areas: 
+        '.  price'
+        '. cart';
+    }
+    .add-to-btn{
+       padding: 0%;
+       grid-area: cart;
+       padding: 3px;
+       
+      
+    }
+    
+
+    
 }

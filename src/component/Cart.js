@@ -181,6 +181,7 @@ function handleCheckOut(){
           {user.cart.map(item=>{
             return(
               <div className="cart-list-item" key={item.id}>
+
                   <input type="checkbox" onChange={()=>handleCheckbox(item.id)} checked={isChecked(item.id)} />
                   <div>
                     <div className="list-item-img" onClick={()=>
@@ -189,7 +190,7 @@ function handleCheckOut(){
                     </div>
                     <p>{item.title}</p>
                   </div>
-                  <p>{item.price}</p>
+                  <p className='unit-price'>{item.price}</p>
                   <div className="cart-item-quantity">
                     <TiMinus onClick={()=>setQuantity("minus",item.id)}/>
                     <p>{item.quantity}</p>
@@ -199,9 +200,10 @@ function handleCheckOut(){
                   <p>RM {item.price*item.quantity}</p>
               </div>
             )
-          })}
+            })}
           
         </div>
+
         <div className="cart-total">
           <div>
           <input type="checkbox" name='selectAll' onChange={()=>handleCheckbox("all") } checked={isAllSelected}/>
@@ -210,6 +212,7 @@ function handleCheckOut(){
           <div className='mr-1' onClick={addLiked}>Move to Like</div>
           </div>
           <p>Total : <span>RM{total}</span></p>
+         
           <div>
            
             <button onClick={handleCheckOut}>Check Out</button>

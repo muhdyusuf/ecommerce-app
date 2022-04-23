@@ -65,8 +65,8 @@ function Like() {
                     <div className="liked-img">
                       <img src={item.image} alt="" />
                     </div>
-                    <p>{item.title}</p>
-                    <p>RM {item.price}</p>
+                    <p >{item.title}</p>
+                    <p className='cart-price'>RM {item.price}</p>
                     <button className='add-to-btn' onClick={()=>addToCart(item)}>Add to cart</button>
                     <BsPlus className='remove-btn' onClick={()=>removeFromLiked(item)}/>
                   </div>
