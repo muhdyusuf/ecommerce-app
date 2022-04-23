@@ -64,6 +64,9 @@
     width: 200px;
     padding: 1rem;
     margin-left: 1rem;
+    background-color: var(--accent-col);
+    color: var(--color-light);
+    font-weight: 500;
 }
 .cart-total input{
     margin-right:1rem ;
@@ -93,26 +96,19 @@
         flex-wrap: wrap;
     }
     .cart-total>:first-child{
-        width: 60%;
-        grid-template-columns: 30px 1fr 1fr 1fr;
-        margin-right: 0;
+        display: flex;
+        width:100% ;
+        justify-content: space-between;
+        margin-bottom: 10px;
     }
-    .cart-total>:nth-child(2){
-        width: 40%;
+    .cart-total>p{
+       align-self: flex-end;
         
     }
+    .cart-total span{
+        margin-left: 3px;
+    }
     
-    .cart-total>div{
-        width: 100%;
-    }
-    .cart-total>:last-child>button{
-        align-self: flex-end;
-    }
-    .cart-total>:last-child{
-        display: flex;
-        justify-content: end;
-        margin-top:1rem;
-    }
     .list-header>p{
         display: none;
     }
