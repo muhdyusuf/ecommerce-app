@@ -1,47 +1,47 @@
-import React, { useState } from 'react'
-import {UserContext,LoginContext} from './UserContext'
-import { useContext } from 'react'
+import React from 'react'
+// import {UserContext,LoginContext} from './UserContext'
+// import { useContext } from 'react'
 
 function User() {
 
     // const{user,updateUser}=useContext(UserContext)
-    let user={
-        id:"aasdasd",
-        userName:"",
-        name:"lorem",
-        address:{
-          firstName:"",
-          lastName:"",
-          emailAddress:"lorem@ipsum.com",
-          phone:"012338432",
-          address:"lot 3 aras 20",
-          poscode:"90000",
-          city:"sandakan",
-          state:"Sabah",
-          country:"Malaysia",
-        },
-        wallet:100,
-        checkout:[],
-        cart:[],
-        liked:[]
+//     let user={
+//         id:"aasdasd",
+//         userName:"",
+//         name:"lorem",
+//         address:{
+//           firstName:"",
+//           lastName:"",
+//           emailAddress:"lorem@ipsum.com",
+//           phone:"012338432",
+//           address:"lot 3 aras 20",
+//           poscode:"90000",
+//           city:"sandakan",
+//           state:"Sabah",
+//           country:"Malaysia",
+//         },
+//         wallet:100,
+//         checkout:[],
+//         cart:[],
+//         liked:[]
                      
-      }
-    const [readOnly,setReadOnly]=useState(true)
+//       }
+//     const [readOnly,setReadOnly]=useState(true)
 
-    let newUser={...user}
+//     let newUser={...user}
     
-    function handleChange(e){
-        console.log(e.target.value)
-    }
-function updateNewUser(){
+//     function handleChange(e){
+//         console.log(e.target.value)
+//     }
+// function updateNewUser(){
 
 
-}
+// }
 
   return (
     <section>
         <div className="page-header">
-            <h1>{user.name}</h1>
+            <h1>Lorem.</h1>
         </div>
         <div className="container user">
             <img src="https://i.pinimg.com/originals/db/04/00/db0400868e5aac451726ad8bb0f9a8f2.gif" alt="" />

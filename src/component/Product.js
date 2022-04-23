@@ -167,6 +167,9 @@ function buyNow(){
 
   return (
     <section className='product'>
+        <div className="page-header">
+            <h1>Product</h1>
+        </div>
         <div className="container">
             {(function (){
                 if(productData===undefined){
@@ -223,7 +226,6 @@ function buyNow(){
                                     <span>{productData.rating.count} Reviews</span>
                                 
                                 </div>
-        
                                 <p className='border-bottom product-desc'>{productData.description}</p>
                                 <h2 >RM{productData.price}</h2>
                                 <div className="product-btn">
@@ -254,7 +256,7 @@ function buyNow(){
             
             
         </div>
-        <Modal open={modal[0]}>{modal[1]}</Modal>
+        
     </section>
   )
 }

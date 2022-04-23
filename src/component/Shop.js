@@ -1,22 +1,21 @@
 import React from 'react'
 import Itemlist from './Itemlist'
-import { useSearchParams,useParams } from 'react-router-dom'
+import { useSearchParams} from 'react-router-dom'
 import './SHOP.css'
-import { useEffect,useState,useContext } from 'react'
+import { useEffect,useState} from 'react'
 import {AiFillStar,AiOutlineStar} from 'react-icons/ai'
 import Newsletter from './Newsletter'
 import Promise from './Promise'
-import {LoginContext,UserContext} from './UserContext'
+
 
 
 function Shop() {
   
-  const {user,updateUser}=useContext(UserContext)
-  const {isLogIn}=useContext(LoginContext)
 
 
 
-   const [search,setSearch]=useSearchParams()
+
+   const [search]=useSearchParams()
    const [dataProps,setdataProps]=useState(["all"])
    const [filterActive,setFilterActive]=useState(false)
    

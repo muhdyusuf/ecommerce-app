@@ -41,15 +41,15 @@ function BottomNav() {
 
   return (
     <div className='bottom-nav'>
-      <div className={selected=="home"? "bottom-nav-icon active":"bottom-nav-icon"} onClick={()=>handleNavigate("home")}>
+      <div className={selected==="home"? "bottom-nav-icon active":"bottom-nav-icon"} onClick={()=>handleNavigate("home")}>
         <AiOutlineHome/>
         <p>home</p>
       </div>
-      <div className={selected=="shop"? "bottom-nav-icon active":"bottom-nav-icon"} onClick={()=>handleNavigate("shop")}>
+      <div className={selected==="shop"? "bottom-nav-icon active":"bottom-nav-icon"} onClick={()=>handleNavigate("shop")}>
         <AiOutlineShop/>
         <p>shop</p>
       </div>
-      <div className={selected=="blog"? "bottom-nav-icon active":"bottom-nav-icon"} onClick={()=>handleNavigate("blog")}>
+      <div className={selected==="blog"? "bottom-nav-icon active":"bottom-nav-icon"} onClick={()=>handleNavigate("blog")}>
         <IoReaderOutline/>
         <p>blog</p>
       </div>
