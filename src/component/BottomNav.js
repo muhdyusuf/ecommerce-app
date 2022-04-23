@@ -9,8 +9,9 @@ import './BottomNav.css'
 function BottomNav() {
   const [selected,setSelected]=useState("home")
   let navigate=useNavigate()
+
   function handleNavigate(val){
-    if(selected===val)return
+   
     setSelected(val)
     switch(val){
       case "home":{

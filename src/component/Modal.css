@@ -1,0 +1,54 @@
+.modal{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: rgba(0,0,0,.5);
+    padding: 3rem;
+    z-index: 1000;
+    color: var(--color-light);
+    border-radius: 5px;
+}
+.modal.loading-modal{
+    display: flex;
+}
+.loading-modal>div{
+    margin: 3px;
+    height: 10px;
+    width: 10px;
+   
+    border-radius: 50%;
+    animation: rise 2.5s ease-in-out alternate infinite;
+}
+
+@keyframes rise {
+    0%,100%{
+        transform: scale(.3);
+        background-color: rgba(255, 255, 255, 0.3);
+        
+    }
+
+    50%,60%{
+        transform: scale(1);
+        background-color: rgba(255, 255, 255, 0.9);
+    }
+  
+    
+    
+}
+.loading-modal>:first-child{
+    animation-delay: .25s;
+}
+.loading-modal>:nth-child(2){
+    animation-delay: .5s;
+}
+.loading-modal>:nth-child(3){
+    animation-delay: .75s;
+}
+.loading-modal>:nth-child(4){
+    animation-delay: 1s;
+}
+
+.loading-modal>:last-child{
+    animation-delay: 1.25s;
+}

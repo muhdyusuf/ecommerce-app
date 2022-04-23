@@ -1,16 +1,18 @@
-import {React,useEffect} from 'react'
+import {React,useEffect,useState,useContext} from 'react'
+import {useNavigate} from 'react-router-dom'
+
 
 import {FaHeart,FaRegHeart} from 'react-icons/fa'
-import { useState } from 'react'
-import Modal from './Modal'
-import {useNavigate} from 'react-router-dom'
-import './Itemlist.css'
 
-function Itemlist({dataProps,isLogIn,updateUser,user,shopFilter,length}) {
-  function capitalize(str)
-  {
-    return str[0].toUpperCase() + str.slice(1);
-  }
+import Modal from './Modal'
+import './Itemlist.css'
+import {LoginContext,UserContext} from './UserContext'
+
+function Itemlist({dataProps,shopFilter,length}) {
+
+  const {user,updateUser}=useContext(UserContext)
+  const {isLogIn}=useContext(LoginContext)
+
     const filteredItem=()=>{
         let filteredItem=[...data]
        
@@ -51,7 +53,7 @@ function Itemlist({dataProps,isLogIn,updateUser,user,shopFilter,length}) {
   
       }
 
-   const [modal,updateModal]=useState([false,""])
+  
    const [data,updateData]=useState(null)
 
    useEffect(()=>{
@@ -129,7 +131,7 @@ function Itemlist({dataProps,isLogIn,updateUser,user,shopFilter,length}) {
      else if(data.length===0){
        if(dataProps[0]==="search"){
          return(
-           <div>
+           <div className='no-item'>
              <p>No item for keyword '{dataProps[1]}'</p>
            </div>
          )
@@ -163,13 +165,13 @@ function Itemlist({dataProps,isLogIn,updateUser,user,shopFilter,length}) {
    
    
           
-           <Modal open={modal[0]}>{modal[1]}</Modal>
+          
            
            
        </div>
          ) :
          (
-           <div>
+           <div className='no-item'>
              <p>no item match filter</p>
            </div>
          )}
@@ -184,9 +186,7 @@ function Itemlist({dataProps,isLogIn,updateUser,user,shopFilter,length}) {
    }
    
 
-    function delay(time) {
-    return new Promise(resolve => setTimeout(resolve, time));
-   }
+   const {modal,updateModal}=useContext(UserContext)
 
     function updateUserCart(val){
         if(!isLogIn){
@@ -213,7 +213,7 @@ function Itemlist({dataProps,isLogIn,updateUser,user,shopFilter,length}) {
         console.log(newUser)
         updateUser({...newUser})
         updateModal([true,"Item added to cart"])
-        delay(1000).then(()=>updateModal([false,"Item added to cart"]))
+      
          
     }
 
@@ -229,14 +229,15 @@ function Itemlist({dataProps,isLogIn,updateUser,user,shopFilter,length}) {
         if(isDuplicate<0){
             val.quantity=1
             newUser.liked=newUser.liked.concat(val)
-            updateModal([true,"Item added to liked"])
-            delay(1000).then(()=>updateModal([false,"Item added to liked"]))
+            let newModal=[true,"Item added to liked"]
+            console.log(modal[0])
+            updateModal([...newModal])
+           
             
         }
         else if(isDuplicate>=0){
             newUser.liked.splice(isDuplicate,1)
             updateModal([true,"Item removed from liked"])
-        delay(1000).then(()=>updateModal([false,"Item removed from liked"]))
             
         }
        
@@ -251,6 +252,13 @@ function Itemlist({dataProps,isLogIn,updateUser,user,shopFilter,length}) {
 
 
      const isLiked=(val)=>{
+        
+       if(!isLogIn){
+        return (
+          <FaRegHeart onClick={()=>navigate('/login')}/>
+      )
+       }
+    
         const isDuplicate=user.liked.findIndex(item=>item.id==val.id)
         if(isDuplicate<0){
             return (

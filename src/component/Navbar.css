@@ -19,9 +19,8 @@ nav{
     padding: 0 1rem ;
     background-color: var(--nav-upper);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     font-size: 14px;
+    justify-content: end;
     
 }
 
@@ -133,15 +132,23 @@ nav{
     right: 0;
     background-color: var(--color-light);
     padding: 1rem 0;
-    width:200%;
+    width:200px;
     height: auto;
     z-index: 100;
     cursor: pointer;
     border: 1px solid gray;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
 
 }
 .user-nav-hover.active>div:hover{
     background-color: var(--accent-col);
+}
+.user-nav-hover.active>div{
+    width: 100%;
+    padding: .5rem 0;
+    text-align: start;
 }
 @media (max-width:768px) {
     .nav-link{

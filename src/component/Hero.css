@@ -1,4 +1,6 @@
-
+:root{
+    --hero-transition:transform ease-in-out .3s;
+}
 .hero{
     position: relative;
     max-width: 100%;
@@ -78,10 +80,10 @@
     min-width: 100%;
     min-width: 100%;
     transform: translateX(var(--hero-slider));
-    transition: transform ease-in-out .3s;
-    
-    
+    transition:var(--hero-transition); 
 }
+
+
 .hero-img-title{
     position: absolute;
     width: 70%;

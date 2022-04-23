@@ -1,10 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState,useContext} from 'react'
 import { Link,useNavigate} from 'react-router-dom'
 import './Login.css'
 import {AiOutlineEyeInvisible,AiOutlineEye} from 'react-icons/ai'
+import {UserContext,LoginContext} from './UserContext'
 
 
-function Login({updateLogin}) {
+function Login() {
+
+
+    const {updateUser}=useContext(UserContext)
+    const {updateLogin}=useContext(LoginContext)
+
     let navigate=useNavigate()
     
 
@@ -76,8 +82,10 @@ function Login({updateLogin}) {
         
 
     }
+    const {modal,updateModal}=useContext(UserContext)
 
     function signIn(){
+        updateModal([true,"",""])
         if(isValid.emailAddress==true || isValid.emailAddress==false ||
             isValid.password==true || isValid.password==false ) {
                 let newIsValid=isValid
@@ -90,10 +98,12 @@ function Login({updateLogin}) {
                     newIsValid.passwordError="Input cannot be empty"
                 }
                 updateIsValid({...newIsValid})
+                updateModal([false])
                 return
                 
             }
             else{
+                updateModal([true,"",[]])
                 fetch('https://fakestoreapi.com/auth/login',{
                 method:'POST',
                 headers:{'Content-Type':'application/json'},
@@ -106,15 +116,45 @@ function Login({updateLogin}) {
                 .then(json=>{
                     if (!json){
                         console.log("incorrect pass")
+                        updateModal([false])
+                        updateModal([true,"Invalid Email/Username or Password"])
                     }
                     else if(json.token){
                         console.log("correct pass")
                         navigate('/')
                         updateLogin(true)
+                        updateUser({
+                            id:"aasdasd",
+                            name:"lorem",
+                            address:{
+                              phone:"012338432",
+                              lot:"lot 3 aras 20",
+                              poscode:"90000",
+                              city:"sandakan",
+                              state:"Sabah",
+                              country:"Malaysia",
+                            },
+                            wallet:100,
+                            checkout:[],
+                            cart:[],
+                            liked:[]
+                          
+                          }
+                        )
+                        updateModal([false])
+                        updateModal([true,"Succesfully Log In"])
                         
                         
                     }
                 })
+                .catch(error=>{
+                    console.log(error)
+                    
+                    updateModal([true,"Check internet connnection"])
+
+                }
+
+                )
             }
 
         

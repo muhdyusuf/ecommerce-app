@@ -1,6 +1,11 @@
 .liked-container{
     margin: 3rem 0;
 }
+.liked-container.no-item{
+    margin: 2rem ;
+    display: flex;
+    justify-content: center;
+}
 .liked-container-header{
     display: grid;
     grid-template-columns: 1.3fr 1fr;

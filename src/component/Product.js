@@ -1,7 +1,7 @@
 import React from 'react'
 import './Product.css'
 import{useParams,useNavigate} from "react-router-dom"
-import { useEffect,useState } from 'react'
+import { useEffect,useState,useContext } from 'react'
 import {AiFillStar,AiOutlineStar} from 'react-icons/ai'
 import{TiMinus,TiPlus} from 'react-icons/ti'
 import Modal from './Modal'
@@ -9,12 +9,18 @@ import {FaHeart,FaRegHeart} from 'react-icons/fa'
 import Itemlist from './Itemlist'
 import Newsletter from './Newsletter'
 import Promise from './Promise'
+import {LoginContext,UserContext} from './UserContext'
 
 
-function Product( {isLogIn,user,updateUser}) {
-let navigate=useNavigate()
-const {productId}=useParams()
-const [productData,updateProductData]=useState(null)
+function Product() {
+
+    const {user,updateUser}=useContext(UserContext)
+    const {modal,updateModal}=useContext(UserContext)
+    const {isLogIn}=useContext(LoginContext)
+
+    let navigate=useNavigate()
+    const {productId}=useParams()
+    const [productData,updateProductData]=useState(null)
 
 
 
@@ -67,12 +73,9 @@ const productRating=()=>{
         }
     }))
 }
-const [modal,updateModal]=useState([false,""])
 
- function delay(time) {
- return new Promise(resolve => setTimeout(resolve, time));
- }
- 
+
+
  function updateUserCart(val){
     const newUser=user
     
@@ -93,7 +96,7 @@ const [modal,updateModal]=useState([false,""])
     console.log(newUser)
     updateUser({...newUser})
     updateModal([true,"Item added to cart"])
-    delay(1000).then(()=>updateModal([false,"Item added to cart"]))
+    
      
 }
 
@@ -105,13 +108,13 @@ function updateUserLiked(val){
         val.quantity=1
         newUser.liked=newUser.liked.concat(val)
         updateModal([true,"Item added to liked"])
-        delay(1000).then(()=>updateModal([false,"Item added to liked"]))
+        
         
     }
     else if(isDuplicate>=0){
         newUser.liked.splice(isDuplicate,1)
         updateModal([true,"Item removed from liked"])
-    delay(1000).then(()=>updateModal([false,"Item removed from liked"]))
+   
         
     }
    

@@ -1,7 +1,7 @@
 .bottom-nav{
     display: none;
 }
-@media (max-width:576px) {
+@media (max-width:768px) {
     body{
         padding-bottom: 3rem;
         
@@ -62,7 +62,7 @@
     }
     .bottom-nav>div.active{
         color: var(--accent-col);
-        transform: scale(1.05);
+        transform: scale(1.01);
         font-weight: 900;
         transition: transform ease-in .3s;
     }

@@ -1,9 +1,14 @@
-import React from 'react'
+import {React,useContext} from 'react'
 import Cart from './Cart'
 import './Like.css'
 import {BsPlus} from 'react-icons/bs'
+import {LoginContext,UserContext} from './UserContext'
 
-function Like({user,updateUser}) {
+function Like() {
+
+  const {user,updateUser}=useContext(UserContext)
+  
+
   function removeFromLiked(val){
     let newUser={...user}
     console.log(newUser)
@@ -39,7 +44,10 @@ function Like({user,updateUser}) {
    console.log(liked)
    if(liked.length==0 || !liked){
      return(
-      <p>No item in your list</p>
+       <div className="liked-container no-item">
+         <p>No item in your list</p>
+       </div>
+      
      )
    }
 

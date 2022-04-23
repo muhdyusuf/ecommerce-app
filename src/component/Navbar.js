@@ -1,13 +1,16 @@
-import React from 'react'
-import {Link,useNavigate,useSearchParams} from 'react-router-dom'
-import ShoppingCart from './ShoppingCart'
+import { React,useState,useContext} from 'react'
+import {Link,useNavigate} from 'react-router-dom'
 import {HiOutlineShoppingCart} from 'react-icons/hi'
 import {BiHeart,BiSearch} from 'react-icons/bi'
-import { useState } from 'react'
 import './Navbar.css'
+import {LoginContext,UserContext} from './UserContext'
 
-function Navbar({isLogIn,updateLogin,user}) {
+function Navbar() {
   let navigate=useNavigate()
+  const {user}=useContext(UserContext)
+  const {isLogIn,updateLogin}=useContext(LoginContext)
+  const {updateModal}=useContext(UserContext)
+ 
 
    const [userHover,updateHover]=useState(false)
 
@@ -17,7 +20,11 @@ function Navbar({isLogIn,updateLogin,user}) {
                 <div className='user-nav' onClick={()=>updateHover(!userHover)}>
                     <p>hi {user.name}</p>
                     <div className={userHover? "user-nav-hover active":"user-nav-hover"} onMouseOut={()=>updateHover(!userHover)}>
-                        <div className='user-nav-btn' onClick={()=>updateLogin(false)}>Log out</div>
+                        <div className='user-nav-btn' onClick={()=>{
+                            updateModal([true,"User Logged out"])
+                            updateLogin(false)
+                            navigate('/')
+                        }}>Log out</div>
                     </div>
                 </div>
             )
@@ -46,13 +53,14 @@ function Navbar({isLogIn,updateLogin,user}) {
   }
   const navIconSpan=(icon)=>{
       if(icon=="cart"){
-          if(isLogIn)return user.cart.length
+          if(isLogIn && user.cart)return user.cart.length
           else{
               return 0
           }
       }
       else if(icon=="liked"){
-        if(isLogIn)return user.liked.length
+
+        if(isLogIn && user.liked)return user.liked.length
         else{
             return 0
         }

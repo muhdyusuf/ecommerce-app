@@ -1,19 +1,42 @@
-import React from 'react'
-import Login from './Login'
-import { Link } from 'react-router-dom'
+import React, { useContext } from 'react'
+import './Register.css'
+import User from './USERCLASS.JS'
+
+
+import { Link,useNavigate} from 'react-router-dom'
 import { useState } from 'react'
+import { FaRegUserCircle } from 'react-icons/fa'
 import {AiOutlineEyeInvisible,AiOutlineEye} from 'react-icons/ai'
+import {UserContext,LoginContext} from './UserContext'
+
+
+
+
+
+    
+
+
 
 function Register() {
+    let navigate=useNavigate()
+    
+    
+    const{updateUser}=useContext(UserContext)
+    const{updateLogin}=useContext(LoginContext)
+    
+    const [isRegister,updateRegister]=useState(false)
+
     const [isValid,updateIsValid]=useState({
         emailAddress:true,
         password:true,
         confirmPassword:true,
+        userName:true,
         seePassword:false,
         seeConfirmPassword:false,
         emailAddressError:"",
         passwordError:"",
-        confirmPasswordError:"" 
+        confirmPasswordError:"" ,
+        userNameError:""
     })
   
     function validation(e){
@@ -56,6 +79,16 @@ function Register() {
                 }
             }
             break
+            case "username":{
+                if(/^[a-z]+_?[0-9a-z]*$/i.test(e.target.value)){
+                    newIsValid.userName=e.target.value
+                }
+                else{
+                    newIsValid.userNameError="username should start with letter and end with letter or number,only one underscore allowed"
+                    newIsValid.userName=false
+                }
+
+            }
             
         }
 
@@ -85,60 +118,115 @@ function Register() {
 
         })
         updateIsValid({...newIsValid})
-       if( [isValid.emailAddress,isValid.password,isValid.confirmPassword].some(item=>item===false))return
-
-       console.log(`register username: ${isValid.emailAddress} password:${isValid.password}`)
+       if( [isValid.emailAddress,isValid.password,isValid.confirmPassword].some(item=>item===false || item===true))return
+       else{
+           updateRegister(true)
+       }
         
+    }
+    function registerUser(){
+        if(isValid.userName === true || isValid.userName ===false)
+        return
+        const user={
+            id:"aasdasd",
+            userName:isValid.userName,
+            name:isValid.userName,
+            address:{
+              firstName:"",
+              lastName:"",
+              emailAddress:isValid.emailAddress,
+              phone:"",
+              address:"",
+              poscode:"",
+              city:"",
+              state:"",
+              country:"Malaysia",
+            },
+            wallet:100,
+            checkout:[],
+            cart:[],
+            liked:[]
+                         
+          }
+        
+          updateUser({...user})
+          updateLogin(true)
+          navigate('/')
+          updateRegister(false)
+
+
     }
 
   return (
     <section>
-    <div className="page-header">
-        <h1>Register</h1>
-    </div>
-    <div className="container">
-        <div className='login-form'>
-        <label>Email address</label>
-          <div className="input-container">
-               <input type="text" name='emailAddress' className={isValid.emailAddress? "":"email invalid"} onBlur={(e)=>validation(e)}/>
-               <div className={isValid.emailAddress? "error-message":"error-message display"}>
-                        {isValid.emailAddressError}
+        {!isRegister && (
+        <>
+        <div className="page-header">
+                <h1>Register</h1>
+            </div>
+            <div className="container">
+                <div className='login-form'>
+                <label>Email address</label>
+                <div className="input-container">
+                    <input type="text" name='emailAddress' className={isValid.emailAddress? "":"email invalid"} onBlur={(e)=>validation(e)}/>
+                    <div className={isValid.emailAddress? "error-message":"error-message display"}>
+                                {isValid.emailAddressError}
+                        </div>
                 </div>
-          </div>
-          
+                
 
 
-           <label >Password</label>
-            <div className='input-container'>
-                    <input type={isValid.seePassword?"text":"password"} name="password" className={isValid.password? "":"email invalid"} onBlur={(e)=>validation(e)}/>
-                 <div className="password-icon">
-                     {isValid.seePassword? <AiOutlineEye onClick={()=>handlePassword("password")}/>:<AiOutlineEyeInvisible onClick={()=>handlePassword("password")}/>}
-                 </div>
-                 <div className={isValid.password? "error-message":"error-message display"}>
-                       {isValid.passwordError}
+                <label >Password</label>
+                    <div className='input-container'>
+                            <input type={isValid.seePassword?"text":"password"} name="password" className={isValid.password? "":"email invalid"} onBlur={(e)=>validation(e)}/>
+                        <div className="password-icon">
+                            {isValid.seePassword? <AiOutlineEye onClick={()=>handlePassword("password")}/>:<AiOutlineEyeInvisible onClick={()=>handlePassword("password")}/>}
+                        </div>
+                        <div className={isValid.password? "error-message":"error-message display"}>
+                            {isValid.passwordError}
+                        </div>
                 </div>
-           </div>
 
 
-           <label >Confirm Password</label>
-           <div className="input-container">
-                 <input type={isValid.seeConfirmPassword?"text":"password"} name="confirmPassword" className={isValid.confirmPassword? "":"email invalid"} onBlur={(e)=>validation(e)}/>
+                <label >Confirm Password</label>
+                <div className="input-container">
+                        <input type={isValid.seeConfirmPassword?"text":"password"} name="confirmPassword" className={isValid.confirmPassword? "":"email invalid"} onBlur={(e)=>validation(e)}/>
 
-                 <div className="password-icon">
-                     {isValid.seeConfirmPassword? <AiOutlineEye onClick={()=>handlePassword("confirm")}/>:<AiOutlineEyeInvisible onClick={()=>handlePassword("confirm")}/>}
-                 </div>
+                        <div className="password-icon">
+                            {isValid.seeConfirmPassword? <AiOutlineEye onClick={()=>handlePassword("confirm")}/>:<AiOutlineEyeInvisible onClick={()=>handlePassword("confirm")}/>}
+                        </div>
 
-                 <div className={isValid.confirmPassword? "error-message":"error-message display"}>
-                        {isValid.confirmPasswordError}
+                        <div className={isValid.confirmPassword? "error-message":"error-message display"}>
+                                {isValid.confirmPasswordError}
+                        </div>
                 </div>
-           </div>
-           <button className='btn-primary' onClick={handleRegister}>Register</button>
-           
-           <Link to="/login" className='to-register'>OR LOGIN</Link>
+                <button className='btn-primary' onClick={handleRegister}>Register</button>
+                
+                <Link to="/login" className='to-register'>OR LOGIN</Link>
+                </div>
+            
+
+            </div>
+       </>)}
+
+        {isRegister && (
+            <div className="container set-username">
+            <div className="username-card">
+                <FaRegUserCircle/>
+                <label >Set Username</label>
+                <div className="input-container">
+                    <input type="text" name="username" className={isValid.userName? "":"username-invalid"} onBlur={(e)=>validation(e)}/>
+                    <div className={isValid.userName? "error-message":"error-message display"}>
+                                {isValid.userNameError}
+                    </div>
+                </div>
+                <button className="btn-primary" onClick={registerUser}>
+                    register
+                </button>
+            </div>
+
         </div>
-       
-
-    </div>
+        )}
 </section>
 )
   

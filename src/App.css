@@ -41,21 +41,15 @@ section{
     margin: auto;
     overflow: hidden;
 }
+.container.user{
+    display: grid;
+    place-content: center;
+}
 .col-primary{
     color: var(--accent-col);
 }
 
-.modal{
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    background-color: rgba(0,0,0,.5);
-    padding: 3rem;
-    z-index: 1000;
-    color: var(--color-light);
-    border-radius: 5px;
-}
+
 .ff2{
     font-family: 'Source Sans Pro', sans-serif;
 
@@ -91,6 +85,9 @@ button{
 }
 .mt-1{
     margin-top: 1rem;
+}
+.p1{
+    padding: 1rem;
 }
 .btn-primary{
     background-color: var(--accent-col);

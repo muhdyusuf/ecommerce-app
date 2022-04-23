@@ -62,6 +62,31 @@
     grid-template-columns: 1fr .7fr;
     gap: 3rem;
 }
+
+.wallet{
+    display: flex;
+    flex-direction: column;
+    border: 5px solid #f5f5f5;
+  
+}
+.wallet>div{
+    padding: 1.5rem 0 0 0;
+    display: flex;
+    justify-content: space-between;
+}
+.balance{
+    font-size: 2rem;
+    color: var(--color-dark);
+}
+.balance.kurang{
+    color: #bbbbbb;
+}
+
+
+
+
+
+
 @media (max-width:768px) {
     .checkout-container{
         grid-template-columns: 1fr;

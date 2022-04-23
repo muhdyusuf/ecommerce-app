@@ -1,16 +1,21 @@
 import React from 'react'
-
-import {BiHeart} from 'react-icons/bi'
-import {useState} from 'react'
+import {useState,useContext} from 'react'
 import Hero from './Hero'
 import Itemlist from './Itemlist'
 import Newsletter from './Newsletter';
 import Promise from './Promise'
-import PromoBox from './PromoBox'
+import {LoginContext,UserContext} from './UserContext'
 
 
 
-function Home({isLogIn,data,user,updateUser}) {
+function Home() {
+
+    const {user,updateUser}=useContext(UserContext)
+    const {isLogIn,updateLogin}=useContext(LoginContext)
+
+    
+
+
     const [currentslide,updateSlide]=useState("newArrival")
 
     function changeCarousel(val){
@@ -77,9 +82,9 @@ function Home({isLogIn,data,user,updateUser}) {
                 <span></span>
             </div>
             <div className="featured-group">
-                <Itemlist isLogIn={isLogIn}  dataProps={["category","men's clothing"]} updateUser={updateUser} user={user} length={4}/>
-                <Itemlist isLogIn={isLogIn}  dataProps={["category","women's clothing"]} updateUser={updateUser} user={user} length={4}/>
-                <Itemlist isLogIn={isLogIn}  dataProps={["category","jewelery"]} updateUser={updateUser} user={user} length={4}/>
+                <Itemlist  dataProps={["category","men's clothing"]} length={4}/>
+                <Itemlist  dataProps={["category","women's clothing"]} length={4}/>
+                <Itemlist  dataProps={["category","jewelery"]}  length={4}/>
                 
             </div>
             <div className="shop-button">

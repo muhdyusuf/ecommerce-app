@@ -1,9 +1,19 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState,useEffect,useContext} from 'react'
 import {useNavigate} from 'react-router-dom'
 import './Checkout.css'
+import {LoginContext,UserContext} from './UserContext'
 
 
-function Checkout({user}) {
+function Checkout() {
+
+    const {user,updateUser}=useContext(UserContext)
+    
+    console.log(user.wallet)
+   
+
+
+
+
     let navigate=useNavigate()
     if(user.checkout.length==0){
         navigate('/shop')
@@ -12,13 +22,7 @@ function Checkout({user}) {
     
    
 
-    const [userAddress,updateAddress]=useState(
-        {
-            country:"Malaysia",
-            postcode:null,
-
-        }
-    )
+   
    
 
     const allState={
@@ -336,6 +340,9 @@ function Checkout({user}) {
             
 
 
+
+
+
         }
         updateForm({...newForm})
 
@@ -396,7 +403,7 @@ function Checkout({user}) {
 
                         <div className={form.country ? "input-item":`input-item invalid`} >
                         <label>Country</label>
-                        <input type="text" name="country" onBlur={(e)=>updateInput(e)} value={userAddress.country} readOnly />
+                        <input type="text" name="country" onBlur={(e)=>updateInput(e)} value={form.country} readOnly />
 
                         </div>
 
@@ -485,7 +492,26 @@ function Checkout({user}) {
                             <h3>Order total</h3>
                             <p className='col-primary'>RM {totalPrice+shippingPrice}</p>
                         </div>
-                        <button className='btn-primary' onClick={placeOrder}>Place Order</button>
+                        <div className="wallet">
+                            <h3>E.Wallet</h3>
+                            <div>
+                            <p>balance</p>
+                            <p className={user.wallet>=totalPrice+shippingPrice?"balance" :"balance kurang"}>
+                              RM  {user.wallet}
+                            </p> 
+                            </div>
+                            
+                            
+                        </div>
+                        {user.wallet>=totalPrice+shippingPrice && (
+                            <button onClick={placeOrder} className="btn-primary">Place Order</button>
+                        )}
+                         {user.wallet<totalPrice+shippingPrice && (
+                            <button className="btn-primary">Top Up</button>
+                        )}
+                        
+                        
+                        
                     </div>
 
                

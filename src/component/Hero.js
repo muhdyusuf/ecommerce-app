@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState,useRef,useEffect} from 'react'
 import { useNavigate } from 'react-router-dom'
 import {GrFormNext} from'react-icons/gr'
 import './Hero.css'
@@ -7,22 +7,38 @@ import './Hero.css'
 
 function Hero() {
    let navigate=useNavigate()
-     const [currentHero,updateHero]=useState(1)
-     
-     function changeHero(index){
-         if(index==1){
-            updateHero(1)
-            document.documentElement.style.setProperty('--hero-slider', '0');
-         }
-         else if(index==2){
-            updateHero(2)
-            document.documentElement.style.setProperty('--hero-slider', '-100%');
-         }
-         else if(index==3){
-            updateHero(3)
-            document.documentElement.style.setProperty('--hero-slider', '-200%');
-         }
+     const [currentHero,updateHero]=useState(0)
 
+     
+  const timeoutRef = useRef(null)
+
+  function resetTimeout() {
+      if (timeoutRef.current) {
+         clearTimeout(timeoutRef.current)}
+           
+   }
+
+   useEffect(() => {
+      resetTimeout()
+      timeoutRef.current = setTimeout(()=>
+         updateHero((prevIndex) =>
+            prevIndex === 2 ? 0 : prevIndex + 1
+         ),6000
+         
+      )
+      changeHero(currentHero)
+      document.documentElement.style.setProperty('--hero-transition','transform 1s ease-in-out')
+
+      return () => {
+         resetTimeout()
+      }
+   }, [currentHero])
+    
+
+  
+     function changeHero(index){
+         updateHero(index)
+         document.documentElement.style.setProperty('--hero-slider',`-${index*100}%`)
      }
    
   return (
@@ -66,9 +82,9 @@ function Hero() {
             </div>
             <div className="hero-container">
                 <div className='hero-btn-container'>
-                <button className={currentHero==1? "hero-btn active":"hero-btn"} onClick={()=>changeHero(1)}>01<span></span></button>
-                <button className={currentHero==2? "hero-btn active":"hero-btn"} onClick={()=>changeHero(2)}>02<span></span></button>
-                <button className={currentHero==3? "hero-btn active":"hero-btn"} onClick={()=>changeHero(3)}>03<span></span></button>
+                <button className={currentHero==0? "hero-btn active":"hero-btn"} onClick={()=>changeHero(0)}>01<span></span></button>
+                <button className={currentHero==1? "hero-btn active":"hero-btn"} onClick={()=>changeHero(1)}>02<span></span></button>
+                <button className={currentHero==2? "hero-btn active":"hero-btn"} onClick={()=>changeHero(2)}>03<span></span></button>
                 </div>
              
             </div>

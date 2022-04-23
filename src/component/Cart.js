@@ -1,9 +1,24 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useContext} from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Cart.css'
+import {addToLiked} from '../CRUD/CREATE.JS'
+import {LoginContext,UserContext} from './UserContext'
+import{TiMinus,TiPlus} from 'react-icons/ti'
 
 
-function Cart({user,updateUser}) {
+
+
+function Cart() {
+
+
+  const {user,updateUser}=useContext(UserContext)
+  const {modal,updateModal}=useContext(UserContext)
+
+  
+
+
+
+
   let navigate=useNavigate()
 
   useEffect(()=>{
@@ -14,6 +29,35 @@ function Cart({user,updateUser}) {
     })
   
   },[])
+
+  function addLiked(){
+    let likedList=user.cart.filter(item=>item.isChecked)
+    console.log(likedList)
+    function addToLiked(item){
+      let newUser={...user}
+
+      let userLiked=newUser.liked
+      item.map(item=>{
+          let index=userLiked.findIndex(liked=>liked.id===item.id)
+          if(index===-1){
+              userLiked.push(item)
+          }
+          
+      })
+      console.log(newUser.liked)
+      updateUser({...newUser})
+      deleteItem()
+  
+    }
+    addToLiked(likedList)
+    updateModal([true,"All item added to like"])
+   
+
+    
+    
+
+  }
+  
 
 
   
@@ -64,6 +108,25 @@ function Cart({user,updateUser}) {
    
    
  }
+
+function setQuantity(operator,id){
+  let newUser={...user}
+  let index=user.cart.findIndex(item=>item.id===id)
+  if(operator==="minus" && user.cart[index].quantity >1){
+    newUser.cart[index].quantity-=1
+  }
+  else if(operator==="plus"){
+    newUser.cart[index].quantity+=1
+
+  }
+  
+  updateUser({...newUser})
+  
+
+  
+
+}
+
 function handleCheckOut(){
   const selectedItem=user.cart.filter(item=>item.isChecked)
   if(selectedItem.length==0){
@@ -92,10 +155,12 @@ function handleCheckOut(){
       }
      }
    ,0)
+
    if (user.cart.length==0 || !user.cart){
      return(
-      <div className="cart-container">
-        <h2>please add item in your cart</h2>
+      <div className="cart-container no-item">
+        <p>please add item in your cart</p>
+        
         
       </div>
     
@@ -118,14 +183,20 @@ function handleCheckOut(){
               <div className="cart-list-item" key={item.id}>
                   <input type="checkbox" onChange={()=>handleCheckbox(item.id)} checked={isChecked(item.id)} />
                   <div>
-                    <div className="list-item-img">
+                    <div className="list-item-img" onClick={()=>
+                    navigate(`/product/${item.id}`)}>
                       <img src={item.image} alt="" />
                     </div>
                     <p>{item.title}</p>
                   </div>
                   <p>{item.price}</p>
-                  <p>{item.quantity}</p>
-                  <p>{item.price*item.quantity}</p>
+                  <div className="cart-item-quantity">
+                    <TiMinus onClick={()=>setQuantity("minus",item.id)}/>
+                    <p>{item.quantity}</p>
+                    <TiPlus onClick={()=>setQuantity("plus",item.id)}/>
+                  </div>
+                 
+                  <p>RM {item.price*item.quantity}</p>
               </div>
             )
           })}
@@ -136,10 +207,11 @@ function handleCheckOut(){
           <input type="checkbox" name='selectAll' onChange={()=>handleCheckbox("all") } checked={isAllSelected}/>
           <label htmlFor="selectAll" className='mr-1'>Select all</label>
           <div onClick={deleteItem} className="mr-1">Delete</div>
-          <div className='mr-1'>Move to Like</div>
+          <div className='mr-1' onClick={addLiked}>Move to Like</div>
           </div>
+          <p>Total : <span>RM{total}</span></p>
           <div>
-            <p>Total : <span>RM{total}</span></p>
+           
             <button onClick={handleCheckOut}>Check Out</button>
           </div>
           

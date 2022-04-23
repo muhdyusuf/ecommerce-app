@@ -51,6 +51,7 @@
 .product-btn{
     display: grid;
     grid-template-columns: 1fr 1fr .5fr;
+    height: 50px;
     gap: 1rem;
     align-items: center;
 }

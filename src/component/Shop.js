@@ -2,18 +2,24 @@ import React from 'react'
 import Itemlist from './Itemlist'
 import { useSearchParams,useParams } from 'react-router-dom'
 import './SHOP.css'
-import { useEffect,useState } from 'react'
+import { useEffect,useState,useContext } from 'react'
 import {AiFillStar,AiOutlineStar} from 'react-icons/ai'
 import Newsletter from './Newsletter'
 import Promise from './Promise'
+import {LoginContext,UserContext} from './UserContext'
 
 
-function Shop({isLogIn,user,updateUser}) {
+function Shop() {
+  
+  const {user,updateUser}=useContext(UserContext)
+  const {isLogIn}=useContext(LoginContext)
+
+
+
    const [search,setSearch]=useSearchParams()
    const [dataProps,setdataProps]=useState(["all"])
    const [filterActive,setFilterActive]=useState(false)
    
-    console.log(search.get('search'))
     if(search.get('search') && search.get('search')!==dataProps[1]){
       let newdata=["search",search.get('search')]
       setdataProps([...newdata])
@@ -271,7 +277,7 @@ function Shop({isLogIn,user,updateUser}) {
           <div className="shop-right">
             
            <div className="shop-item">
-           <Itemlist isLogIn={isLogIn} dataProps={dataProps} updateUser={updateUser} user={user} updateFilter={updateFilter} shopFilter={shopFilter} />
+           <Itemlist  dataProps={dataProps}  updateFilter={updateFilter} shopFilter={shopFilter} />
           </div>
            </div>
            
