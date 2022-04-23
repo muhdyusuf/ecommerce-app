@@ -93,10 +93,10 @@ function Navbar() {
             
             
         </div>
-        <div className="nav-lower"><div className="nav-brand" onClick={()=>navigate('/')}>
+        <div className="nav-lower">
+            <div className="nav-brand" onClick={()=>navigate('/')}>
             E-shop<span className='col-primary'>.</span>
-
-        </div >
+            </div >
         <div className="nav-link">
            <Link to="/">HOME</Link>
            <Link to="/shop">SHOP</Link>
