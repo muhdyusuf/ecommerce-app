@@ -20,14 +20,9 @@ nav{
     background-color: var(--nav-upper);
     display: flex;
     font-size: 14px;
-    justify-content: end;
+    justify-content:flex-end;
     
 }
-
-.nav-upper>:last-child{
-    text-align: end;
-}
-
 
 .nav-lower{
     width: 100%;
