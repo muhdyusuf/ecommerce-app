@@ -4,7 +4,7 @@ import{FaFacebookF,FaInstagram,FaTwitter,FaPinterest} from 'react-icons/fa'
 export default function Footer() {
   return (
       <footer>
-          <div className="left"></div>
+          
           <div className="middle">
               <h1>E-shop<span className='col-primary'>.</span></h1>
               <p>"mockup use only"</p>

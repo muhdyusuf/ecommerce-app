@@ -1,7 +1,6 @@
 import React, { useEffect,useContext} from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Cart.css'
-import {addToLiked} from '../CRUD/CREATE.JS'
 import {LoginContext,UserContext} from './UserContext'
 import{TiMinus,TiPlus} from 'react-icons/ti'
 
