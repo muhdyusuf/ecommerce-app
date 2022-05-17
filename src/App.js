@@ -19,6 +19,11 @@ import { useState,useEffect,useContext } from 'react';
 import {LoginContext,UserContext} from './component/UserContext'
 import Modal from './component/Modal';
 import User from './component/User';
+import Input from './component/Input';
+
+import {useSelector,useDispatch} from 'react-redux'
+import {addCart} from './SLICE/cartSlice'
+import {setUser} from './SLICE/userSlice'
 
 
 
@@ -26,48 +31,64 @@ function App() {
 
  const [isLogIn,updateLogin]=useState(true)
  const [user,updateUser]=useState({
-  id:"aasdasd",
-  userName:"lorem123",
-  name:"lorem",
-  address:{
-    firstName:"",
-    lastName:"",
-    emailAddress:"lorem@ipsum.com",
-    phone:"012338432",
-    address:"lot 3 aras 20",
-    poscode:"90000",
-    city:"sandakan",
-    state:"Sabah",
-    country:"Malaysia",
-  },
-  wallet:100,
-  checkout:[],
-  cart:[],
-  liked:[]
+
+    id:"123456789",
+    userName:"",
+    name:"",
+    phone:"",
+    emailAddress:"",
+    address:{
+      firstName:"",
+      lastName:"",
+      address:"",
+      city:"",
+      state:"",
+      country:"",
+    },
+    wallet:100,
+    checkout:[],
+    cart:[],
+    liked:[]
                
 })
+
+const _user=useSelector(state=>state.userState)
+const _cart=useSelector(state=>state.cartState)
+
+//dispatch
+const  dispatch=useDispatch()
+
+
+
+
+
+console.log(_cart)
+
+
+
+console.log()
  const [modal,updateModal]=useState([false,"asdasd"])
 
 
   useEffect(()=>{
     const loginData=localStorage.getItem("isLogin")
     const newUser=localStorage.getItem('USER_DATA')
-    console.log(JSON.parse(loginData))
+    
     JSON.parse(loginData) && isLogIn ? updateLogin(true):updateLogin(false)
     if(isLogIn && JSON.parse(newUser)){
       const newUser=localStorage.getItem("USER_DATA")
-      updateUser(JSON.parse(newUser))
+      updateUser({...JSON.parse(newUser)})
+      
     }
-    console.log(JSON.parse(newUser))
-
-    console.log(isLogIn)
+    
 
   },[])
 
   useEffect(()=>{
     localStorage.setItem("isLogin",isLogIn)
     const loginData=localStorage.getItem("isLogin")
-    console.log('login:',JSON.parse(loginData))
+    
+    
   },[isLogIn])
 
   useEffect(()=>{
@@ -81,7 +102,7 @@ function App() {
   return (
     <>
     <UserContext.Provider value={{updateUser,user,modal,updateModal}}>
-      <LoginContext.Provider value={{isLogIn,updateLogin}}>
+    <LoginContext.Provider value={{isLogIn,updateLogin}}>
     <Router>
       <Navbar />
      
@@ -127,7 +148,10 @@ function App() {
     <Modal/>
     </LoginContext.Provider>
     </UserContext.Provider>
-   
+  
+    <button onClick={()=>dispatch(addCart({
+      id:"111111",
+    }))}>add</button>
 
     </>
   );

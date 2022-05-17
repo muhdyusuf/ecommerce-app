@@ -8,10 +8,24 @@ import Modal from './Modal'
 import './Itemlist.css'
 import {LoginContext,UserContext} from './UserContext'
 
+
+// selector
+
+import {useDispatch,useSelector} from 'react-redux'
+
+
+
+
 function Itemlist({dataProps,shopFilter,length}) {
 
   const {user,updateUser}=useContext(UserContext)
   const {isLogIn}=useContext(LoginContext)
+
+  
+
+  const _cart=useSelector(state=>state.cartState)
+  const _liked=useSelector(state=>state.likedState)
+
 
     const filteredItem=()=>{
         let filteredItem=[...data]

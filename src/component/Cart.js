@@ -4,6 +4,9 @@ import './Cart.css'
 import {LoginContext,UserContext} from './UserContext'
 import{TiMinus,TiPlus} from 'react-icons/ti'
 
+// selector
+import {useSelector} from 'react-redux'
+
 
 
 
@@ -13,7 +16,12 @@ function Cart() {
   const {user,updateUser}=useContext(UserContext)
   const {modal,updateModal}=useContext(UserContext)
 
+  const _cart =useSelector(state=>state.cartState)
+  const _user =useSelector(state=>state.userState)
   
+
+  console.log(_cart,_user)
+
 
 
 
@@ -142,10 +150,15 @@ function handleCheckOut(){
 
 }
 
+function round(num) {
+  var m = Number((Math.abs(num) * 100).toPrecision(15));
+  return Math.round(m) / 100 * Math.sign(num);
+}
+
 
 
  const cartItem=()=>{
-   const total=user.cart.reduce((total,item)=>{
+   let total=user.cart.reduce((total,item)=>{
       if(item.isChecked){
        return item.price*item.quantity+total
       }
@@ -154,6 +167,8 @@ function handleCheckOut(){
       }
      }
    ,0)
+  
+   total=round(total)
 
    if (user.cart.length==0 || !user.cart){
      return(
@@ -196,7 +211,7 @@ function handleCheckOut(){
                     <TiPlus onClick={()=>setQuantity("plus",item.id)}/>
                   </div>
                  
-                  <p>RM {item.price*item.quantity}</p>
+                  <p>RM {round(item.price*item.quantity)}</p>
               </div>
             )
             })}
@@ -210,6 +225,7 @@ function handleCheckOut(){
           <div onClick={deleteItem} className="mr-1">Delete</div>
           <div className='mr-1' onClick={addLiked}>Move to Like</div>
           </div>
+
           <p>Total : <span>RM{total}</span></p>
          
           <div>

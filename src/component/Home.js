@@ -4,6 +4,9 @@ import Hero from './Hero'
 import Itemlist from './Itemlist'
 import Newsletter from './Newsletter';
 import Promise from './Promise'
+
+import { useNavigate } from 'react-router-dom';
+
 import {LoginContext,UserContext} from './UserContext'
 
 
@@ -37,7 +40,7 @@ function Home() {
         }
     }
    
-  
+   let navigate=useNavigate()
 
 
 
@@ -88,7 +91,9 @@ function Home() {
                 
             </div>
             <div className="shop-button">
-                <div className="btn go-to-btn">Go to Shop</div>
+                <div className="btn go-to-btn" 
+                 onClick={()=>navigate("/shop")}
+                >Go to Shop</div>
             </div>
             <Promise/>
             

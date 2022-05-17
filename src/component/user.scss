@@ -1,0 +1,70 @@
+.profile-picture{
+    background-color: white;
+    height: 110px;
+    aspect-ratio: 1/1;
+    margin: auto;
+    border-radius: 10%;
+    display: grid;
+    place-content:center;
+    margin-top: -60px;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.315);
+    margin-bottom: .1rem;
+}
+.page-header.user>h1{
+    opacity: 0;
+}
+
+section.user>.container{
+    margin-top: 2rem;
+    text-align: start;
+    display: flex;
+    flex-direction: column;
+    padding: 0 2rem;
+
+    .input-detail{
+        margin: 2rem 0;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        
+    }
+    .input-cont{
+        margin-bottom: 1rem;
+        background-color: white;
+        display: grid;
+        grid-template-columns: .5fr 1fr;
+        align-items: center;
+        position: relative;
+        
+
+       label{
+           margin: 0;
+       }
+       :nth-child(2){
+           
+           
+           .error-cont{
+               position: absolute;
+               bottom: 0;
+               left: 0;
+               background-color: red;
+           }
+       }
+
+
+
+    }
+
+    .edit-user>button{
+        width: 50px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: transparent;
+        float: right;
+
+    }
+    
+}
+
+    

@@ -1,6 +1,8 @@
 import React, { useContext } from 'react'
 import './Register.css'
-import User from './USERCLASS.JS'
+import {FAKEUSERAPI} from '../FAKEFETCHUSER'
+
+
 
 
 import { Link,useNavigate} from 'react-router-dom'
@@ -25,6 +27,7 @@ function Register() {
     const{updateLogin}=useContext(LoginContext)
     
     const [isRegister,updateRegister]=useState(false)
+    const {modal,updateModal}=useContext(UserContext)
 
     const [isValid,updateIsValid]=useState({
         emailAddress:true,
@@ -124,36 +127,32 @@ function Register() {
        }
         
     }
+
     function registerUser(){
         if(isValid.userName === true || isValid.userName ===false)
         return
-        const user={
-            id:"aasdasd",
-            userName:isValid.userName,
-            name:isValid.userName,
-            address:{
-              firstName:"",
-              lastName:"",
-              emailAddress:isValid.emailAddress,
-              phone:"",
-              address:"",
-              poscode:"",
-              city:"",
-              state:"",
-              country:"Malaysia",
-            },
-            wallet:100,
-            checkout:[],
-            cart:[],
-            liked:[]
-                         
-          }
-        
-          updateUser({...user})
-          updateLogin(true)
-          navigate('/')
-          updateRegister(false)
+        updateModal([true,"",[]])
+        let user
 
+        FAKEUSERAPI.then(res=>{
+            user={...res,name:isValid.userName,emailAddress:isValid.emailAddress}
+            return user
+        }).then(user=>{
+        console.log(user)
+             updateModal([false])
+             updateModal([true,"User Registered"])
+            console.log(user)
+            updateUser({...user})
+            updateLogin(true)
+            navigate('/')
+            updateRegister(false)
+        
+
+
+        })
+
+
+       
 
     }
 

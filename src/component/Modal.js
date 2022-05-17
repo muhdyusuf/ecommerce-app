@@ -8,9 +8,8 @@ function Modal() {
   
 
   const {modal,updateModal}=useContext(UserContext)
-  console.log(modal[0])
 
-  
+
   
   if(!modal[2]){
     function delay(time) {

@@ -4,6 +4,7 @@ import {HiOutlineShoppingCart} from 'react-icons/hi'
 import {BiHeart,BiSearch} from 'react-icons/bi'
 import './Navbar.css'
 import {LoginContext,UserContext} from './UserContext'
+import {useSelector} from 'react-redux'
 
 function Navbar() {
   let navigate=useNavigate()
@@ -13,6 +14,9 @@ function Navbar() {
  
 
    const [userHover,updateHover]=useState(false)
+
+   const _cart=useSelector(state=>state.cartState)
+   const _liked=useSelector(state=>state.likedState)
 
     function userLogin(){
         if(isLogIn){
@@ -53,7 +57,7 @@ function Navbar() {
   }
   const navIconSpan=(icon)=>{
       if(icon=="cart"){
-          if(isLogIn && user.cart)return user.cart.length
+          if(isLogIn && _cart.length>0)return _cart.length
           else{
               return 0
           }
