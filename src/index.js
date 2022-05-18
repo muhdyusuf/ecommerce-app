@@ -8,6 +8,9 @@ import {configureStore} from "@reduxjs/toolkit"
 import {Provider} from 'react-redux'
 import rootReducer from './SLICE/index'
 
+import { useContext,createContext} from 'react';
+
+
 const store=configureStore({
   reducer:rootReducer
 })

@@ -4,22 +4,22 @@ import {BsPerson} from 'react-icons/bs'
 import {FiEdit} from 'react-icons/fi' 
 import './user.scss'
 import {INPUTTYPE} from '../global-function/formValidation'
-import {UserContext,LoginContext} from './UserContext'
+
+import {useSelector} from 'react-redux'
 
 // import { useContext } from 'react'
 
 function User() {
 
   
- const{user}=useContext(UserContext)
- console.log(user)
+ const user=useSelector(state=>state.userState)
 
  const [readOnly,setReadState]=useState(true)
  const [userDetail,setUserDetail]=useState({
    
     userName:{
         name:"userName",
-        value:user.name,
+        value:user.userName,
         isValid:true,
         validationType:INPUTTYPE.USERNAME,
         label:"User Name",
@@ -94,7 +94,7 @@ function User() {
 
         <div className="container">
             
-            <div className="input-detail">
+            {/* <div className="input-detail">
                 {Object.values(userDetail).map(item=>{
                    
                     return(
@@ -130,7 +130,26 @@ function User() {
             
             }
         
+        </div> */}
+        <div className="user-detail">
+            <div className="name">
+                <p>Username</p>
+                <p>{user.userName}</p>
+
+            </div>
+            <div className="email">
+                <p>Email</p>
+                <p>{user.emailAddress}</p>
+            </div>
+            <div className="phone">
+                <p>Phone</p>
+                <p>{user.phone.length===0?"set phone number":user.phone}</p>
+            </div>
+
+
         </div>
+       
+        
 
         </div>
         

@@ -24,7 +24,9 @@ export const userSlice=createSlice({
     },
     reducers:{
         setUser:(state,action)=>{
-            state=action.payload
+
+            return action.payload
+            
 
         },
         setId:(state)=>{
@@ -76,5 +78,5 @@ export const userSlice=createSlice({
     }
 
 })
-export const{setId,updateUserName,updateEmailAddress,updatePhone,updateAddress,deleteAddress,addAddress,updateWallet}=userSlice.actions
+export const{setId,updateUserName,updateEmailAddress,updatePhone,updateAddress,deleteAddress,addAddress,updateWallet,setUser}=userSlice.actions
 export default userSlice.reducer

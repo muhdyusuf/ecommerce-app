@@ -7,14 +7,12 @@ import Promise from './Promise'
 
 import { useNavigate } from 'react-router-dom';
 
-import {LoginContext,UserContext} from './UserContext'
 
 
 
 function Home() {
 
-    const {user,updateUser}=useContext(UserContext)
-    const {isLogIn,updateLogin}=useContext(LoginContext)
+
 
     
 

@@ -6,11 +6,14 @@ export const likedSlice=createSlice({
 
     ],
     reducers:{
+        setLiked:(state,action)=>{
+            return action.payload
+        },
         addLiked:(state,action)=>{
-            state.push(action.payload)
+            return action.payload.concat(state)
         },
         deleteLiked:(state,action)=>{
-            state=state.filter(item=>item.id!==action.payload.id)
+            return state.filter(item=>item.id!==action.payload.id)
         }
   
        
@@ -19,5 +22,5 @@ export const likedSlice=createSlice({
     }
 
 })
-export const{addLiked,deleteLiked}=likedSlice.actions
+export const{addLiked,deleteLiked,setLiked}=likedSlice.actions
 export default likedSlice.reducer

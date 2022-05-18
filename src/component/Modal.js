@@ -1,42 +1,47 @@
 import React from 'react'
 import { createPortal } from 'react-dom'
-import {useContext} from 'react'
-import {UserContext} from './UserContext'
+
+import { useDispatch,useSelector } from 'react-redux';
+import { updateModal } from '../SLICE/utilsSlice';
+
 import './Modal.css'
 
 function Modal() {
   
+ const dispatch=useDispatch()
+ const modal=useSelector(state=>state.utilsState.modal)
+ 
 
-  const {modal,updateModal}=useContext(UserContext)
-
-
-  
-  if(!modal[2]){
+  if(modal.text!==""){
     function delay(time) {
       return new Promise(resolve => setTimeout(resolve, time));
      }
-     
     
-    if(modal[0]){
-      let newModal=[false,""]
-      console.log(modal)
-      delay(1000).then(()=> updateModal([...newModal]))
+    if(modal.isActive){
+    
+      delay(1000).then(()=> dispatch(updateModal({
+        text:"",
+        isActive:false
+      })))
     }
+    
 
-    if(!modal[0])return null
+    
   }
+  if(!modal.isActive)return null
+  
   
   
  
   return createPortal (
     <>
-    { !modal[2] && (
+    {modal.text!=="" && (
       <div className='modal'>
-      <p>{modal[1]}</p>
+      <p>{modal.text}</p>
       </div>
 
     ) }
-    { modal[2] && (
+    { modal.text==="" && (
       <div className="modal loading-modal">
         <div></div>
         <div></div>

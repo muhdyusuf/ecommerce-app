@@ -4,27 +4,33 @@ import {useNavigate} from 'react-router-dom'
 
 import {FaHeart,FaRegHeart} from 'react-icons/fa'
 
+
+
 import Modal from './Modal'
 import './Itemlist.css'
-import {LoginContext,UserContext} from './UserContext'
+
 
 
 // selector
 
 import {useDispatch,useSelector} from 'react-redux'
+import { addCart,addCartQuantity,reduceCartQuantity,mergeCartQuantity} from '../SLICE/cartSlice'
+import { addLiked,deleteLiked,updateLiked } from '../SLICE/likedSlice'
+import {updateModal} from '../SLICE/utilsSlice'
+
 
 
 
 
 function Itemlist({dataProps,shopFilter,length}) {
 
-  const {user,updateUser}=useContext(UserContext)
-  const {isLogIn}=useContext(LoginContext)
+ 
+  const isLogIn=useSelector(state=>state.authState.isAuthorized)
+  const dispatch=useDispatch()
 
-  
 
-  const _cart=useSelector(state=>state.cartState)
-  const _liked=useSelector(state=>state.likedState)
+  const cart=useSelector(state=>state.cartState)
+  const liked=useSelector(state=>state.likedState)
 
 
     const filteredItem=()=>{
@@ -81,11 +87,11 @@ function Itemlist({dataProps,shopFilter,length}) {
         fetch(`https://fakestoreapi.com/products/category/${dataProps[1]}`)
         .then(res=>res.json())
         .then(json=>{
-          console.log(json)
+          
 
           if (length && json.length>length){
             json.splice(length)
-            console.log(json)
+            
           }
           
           updateData(json)})
@@ -200,7 +206,7 @@ function Itemlist({dataProps,shopFilter,length}) {
    }
    
 
-   const {modal,updateModal}=useContext(UserContext)
+  //  const {modal,updateModal}=useContext(UserContext)
 
     function updateUserCart(val){
         if(!isLogIn){
@@ -208,25 +214,24 @@ function Itemlist({dataProps,shopFilter,length}) {
             console.log(isLogIn)
             return
         }
-        const newUser=user
         
-        const isDuplicate=newUser.cart.findIndex(item=>item.id==val.id)
-        console.log(isDuplicate)
+        
+        const isDuplicate=cart.findIndex(item=>item.id==val.id)
+        
         if(isDuplicate<0){
             val.quantity=1
-            newUser.cart=newUser.cart.concat(val)
-            
-            
+            dispatch(addCart([val]))
         }
         else if(isDuplicate>=0){
-            newUser.cart[isDuplicate].quantity+=1
-            
-
+            dispatch(addCartQuantity(val))
+          
         }
 
-        console.log(newUser)
-        updateUser({...newUser})
-        updateModal([true,"Item added to cart"])
+        
+       dispatch(updateModal({
+         text:"Item added to cart",
+         isActive:true
+       }))
       
          
     }
@@ -238,25 +243,28 @@ function Itemlist({dataProps,shopFilter,length}) {
             return
         }
         else{
-            const newUser=user
-        const isDuplicate=newUser.liked.findIndex(item=>item.id==val.id)
-        if(isDuplicate<0){
-            val.quantity=1
-            newUser.liked=newUser.liked.concat(val)
-            let newModal=[true,"Item added to liked"]
-            console.log(modal[0])
-            updateModal([...newModal])
+
+        const isDuplicate=liked.findIndex(item=>item.id==val.id)
+        if(isDuplicate==-1){
+           dispatch(addLiked([val]))
+           dispatch(updateModal({
+            text:"Item added to liked",
+            isActive:true
+          }))
            
             
         }
         else if(isDuplicate>=0){
-            newUser.liked.splice(isDuplicate,1)
-            updateModal([true,"Item removed from liked"])
+           dispatch(deleteLiked({id:val.id}))
+
+          dispatch(updateModal({
+            text:"Item added to liked",
+            isActive:true
+          }))
             
         }
        
-        updateUser({...newUser})
-        
+     
 
 
         }
@@ -273,7 +281,7 @@ function Itemlist({dataProps,shopFilter,length}) {
       )
        }
     
-        const isDuplicate=user.liked.findIndex(item=>item.id==val.id)
+        const isDuplicate=liked.findIndex(item=>item.id==val.id)
         if(isDuplicate<0){
             return (
                 <FaRegHeart onClick={()=>updateUserLiked(val)}/>

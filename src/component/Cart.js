@@ -1,11 +1,17 @@
 import React, { useEffect,useContext} from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Cart.css'
-import {LoginContext,UserContext} from './UserContext'
+
 import{TiMinus,TiPlus} from 'react-icons/ti'
 
 // selector
-import {useSelector} from 'react-redux'
+import {useSelector,useDispatch} from 'react-redux'
+import { addCart,deleteCart,addCartQuantity,reduceCartQuantity, setCart} from '../SLICE/cartSlice'
+import {addLiked,deleteLiked} from '../SLICE/likedSlice'
+import {addCheckout} from '../SLICE/checkoutSlice'
+import {updateModal} from '../SLICE/utilsSlice'
+
+import {round} from '../global-function/function'
 
 
 
@@ -13,152 +19,149 @@ import {useSelector} from 'react-redux'
 function Cart() {
 
 
-  const {user,updateUser}=useContext(UserContext)
-  const {modal,updateModal}=useContext(UserContext)
+ 
+  const dispatch=useDispatch()
 
-  const _cart =useSelector(state=>state.cartState)
-  const _user =useSelector(state=>state.userState)
+  const checkout=useSelector(state=>state.checkoutState)
+  const cart=useSelector(state=>state.cartState)
+  const _user=useSelector(state=>state.userState)
+  const liked=useSelector(state=>state.likedState)
+
   
-
-  console.log(_cart,_user)
-
-
 
 
 
   let navigate=useNavigate()
 
   useEffect(()=>{
-    updateUser(user=>{
-      let newUser={...user}
-      newUser.cart.forEach(item=>item.isChecked=false)
-      return({...newUser})
+    
+    let newCart=cart.map(item=>{
+      if(!item.hasOwnProperty("isChecked")){
+        return{...item,isChecked:false}
+
+      }
+      else{
+        return item
+      }
     })
-  
+    dispatch(setCart(newCart))
+ 
   },[])
 
-  function addLiked(){
-    let likedList=user.cart.filter(item=>item.isChecked)
-    console.log(likedList)
-    function addToLiked(item){
-      let newUser={...user}
-
-      let userLiked=newUser.liked
-      item.map(item=>{
-          let index=userLiked.findIndex(liked=>liked.id===item.id)
-          if(index===-1){
-              userLiked.push(item)
-          }
-          
-      })
-      console.log(newUser.liked)
-      updateUser({...newUser})
-      deleteItem()
   
-    }
-    addToLiked(likedList)
-    updateModal([true,"All item added to like"])
-   
-
-    
-    
-
-  }
-  
-
-
-  
-  
-  const isAllSelected=user.cart.every(item=>item.isChecked==true)
+  const isAllSelected=cart.every(item=>item.isChecked==true)
 
   const isChecked=(id)=>{
-    const itemIndex=user.cart.findIndex(item=>item.id==id)
-    return user.cart[itemIndex].isChecked
-
-
+    const itemIndex=cart.findIndex(item=>item.id==id)
+    return cart[itemIndex].isChecked
   }
  
 
  function deleteItem(){
-   let newUser={...user}
-   newUser.cart=newUser.cart.filter(item=>!item.isChecked)
-   updateUser({...newUser})
-
+   let newCart=cart.filter(item=>!item.isChecked)
+   dispatch(setCart(newCart))
+   
  }
- function handleCheckbox(id){
-  let newUser={...user}
 
-   if(id=="all"){
+
+ function handleCheckbox(id){
+   let newCart=[...cart]
+
+   if(id==="all"){
+
      if(isAllSelected){
-      newUser.cart.forEach(item=>item.isChecked=false)
+       console.log("all selected")
+      newCart=cart.map(item=>{
+        return {...item,isChecked:false}
+      })
      }
      else{
-      newUser.cart.forEach(item=>item.isChecked=true)
-     
-  
+      console.log(id)
+      newCart=cart.map(item=>{
+        return {...item,isChecked:true}
+      })
      }
+     dispatch(setCart(newCart))
      
-  
    }
  
    else{
     
-    const itemIndex=newUser.cart.findIndex(item=>item.id==id)
-   
-    newUser.cart[itemIndex].isChecked=!newUser.cart[itemIndex].isChecked
+    newCart=cart.map(item=>{
+      
+      if(item.id===id){
+        return {...item,isChecked:!item.isChecked}
+      }
+      else{  
+        return item
+      }
+    })
+    dispatch(setCart(newCart))
+  }
     
-   }
-    
-   console.log(newUser)
-    updateUser({...newUser})
-   
    
    
  }
 
-function setQuantity(operator,id){
-  let newUser={...user}
-  let index=user.cart.findIndex(item=>item.id===id)
-  if(operator==="minus" && user.cart[index].quantity >1){
-    newUser.cart[index].quantity-=1
-  }
-  else if(operator==="plus"){
-    newUser.cart[index].quantity+=1
+  function setQuantity(operator,id){
+   
+    let index=cart.findIndex(item=>item.id===id)
+    if(operator==="minus"){
+      dispatch( reduceCartQuantity({id}))
+    }
+    else if(operator==="plus"){
+      dispatch(addCartQuantity({id}))
 
-  }
-  
-  updateUser({...newUser})
-  
-
-  
-
-}
-
-function handleCheckOut(){
-  const selectedItem=user.cart.filter(item=>item.isChecked)
-  if(selectedItem.length==0){
-    return
-  }
-  else{
-    navigate('/checkout')
-    let newUser={...user}
-    newUser.checkout=selectedItem
-    updateUser({...newUser})
+      
+    }
     
 
   }
 
+function handleCheckOut(){
+  const selectedItem=cart.filter(item=>item.isChecked)
+  if(selectedItem.length==0){
+    dispatch(updateModal({
+      text:"Select some item",
+      isActive:true
+    }))
+    
+  }
+  else{
+    dispatch(addCheckout(selectedItem))
+    navigate('/checkout')
+  
+
+  }
+
 }
 
-function round(num) {
-  var m = Number((Math.abs(num) * 100).toPrecision(15));
-  return Math.round(m) / 100 * Math.sign(num);
-}
+
 
 
 
  const cartItem=()=>{
-   let total=user.cart.reduce((total,item)=>{
+  function moveToLiked(){
+    
+    let likedList=cart.filter(item=>{
+      if(item.isChecked && liked.every(liked=>liked.id!==item.id)){
+        return true
+      }
+      else{
+        return false
+      }
+    
+    
+    
+    
+    })
+        dispatch(addLiked(likedList))
+    
+    
+  
+  }
+  
+   let total=cart.reduce((total,item)=>{
       if(item.isChecked){
        return item.price*item.quantity+total
       }
@@ -170,7 +173,7 @@ function round(num) {
   
    total=round(total)
 
-   if (user.cart.length==0 || !user.cart){
+   if (cart.length==0 || !cart){
      return(
       <div className="cart-container no-item">
         <p>please add item in your cart</p>
@@ -192,7 +195,7 @@ function round(num) {
             <p>Quantity</p>
             <p>Total</p>
           </div>
-          {user.cart.map(item=>{
+          {cart.map(item=>{
             return(
               <div className="cart-list-item" key={item.id}>
 
@@ -222,8 +225,8 @@ function round(num) {
           <div>
           <input type="checkbox" name='selectAll' onChange={()=>handleCheckbox("all") } checked={isAllSelected}/>
           <label htmlFor="selectAll" className='mr-1'>Select all</label>
-          <div onClick={deleteItem} className="mr-1">Delete</div>
-          <div className='mr-1' onClick={addLiked}>Move to Like</div>
+          <div  className="mr-1" onClick={deleteItem}>Delete</div>
+          <div className='mr-1' onClick={moveToLiked}>Move to Like</div>
           </div>
 
           <p>Total : <span>RM{total}</span></p>

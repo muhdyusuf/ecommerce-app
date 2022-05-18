@@ -2,16 +2,17 @@ import React, { useState,useContext} from 'react'
 import { Link,useNavigate} from 'react-router-dom'
 import './Login.css'
 import {AiOutlineEyeInvisible,AiOutlineEye} from 'react-icons/ai'
-import {UserContext,LoginContext} from './UserContext'
+import {login} from '../SLICE/authSlice'
+import {setUser} from '../SLICE/userSlice'
+import{useDispatch} from 'react-redux'
 
 
 function Login() {
 
 
-    const {updateUser}=useContext(UserContext)
-    const {updateLogin}=useContext(LoginContext)
 
     let navigate=useNavigate()
+    const dispatch=useDispatch()
     
 
 
@@ -82,10 +83,10 @@ function Login() {
         
 
     }
-    const {modal,updateModal}=useContext(UserContext)
+    // const {modal,updateModal}=useContext(UserContext)
 
     function signIn(){
-        updateModal([true,"",""])
+        // updateModal([true,"",""])
         if(isValid.emailAddress==true || isValid.emailAddress==false ||
             isValid.password==true || isValid.password==false ) {
                 let newIsValid=isValid
@@ -98,12 +99,12 @@ function Login() {
                     newIsValid.passwordError="Input cannot be empty"
                 }
                 updateIsValid({...newIsValid})
-                updateModal([false])
+                // updateModal([false])
                 return
                 
             }
             else{
-                updateModal([true,"",[]])
+                // updateModal([true,"",[]])
                 fetch('https://fakestoreapi.com/auth/login',{
                 method:'POST',
                 headers:{'Content-Type':'application/json'},
@@ -116,33 +117,40 @@ function Login() {
                 .then(json=>{
                     if (!json){
                         console.log("incorrect pass")
-                        updateModal([false])
-                        updateModal([true,"Invalid Email/Username or Password"])
+                        // updateModal([false])
+                        // updateModal([true,"Invalid Email/Username or Password"])
                     }
                     else if(json.token){
                         console.log("correct pass")
                         navigate('/')
-                        updateLogin(true)
-                        updateUser({
-                            id:"aasdasd",
-                            name:"lorem",
-                            address:{
-                              phone:"012338432",
-                              lot:"lot 3 aras 20",
-                              poscode:"90000",
-                              city:"sandakan",
-                              state:"Sabah",
-                              country:"Malaysia",
+                        dispatch(login({
+                            currentUser:{
+                                id:111111
                             },
+                            isAuthorized:true
+                        }))
+                        dispatch(setUser({
+
+                            id:"",
+                            userName:"",
+                            phone:"",
+                            emailAddress:"",
+                            address:[
+                            {
+                                firstName:"",
+                                lastName:"",
+                                address:"",
+                                city:"",
+                                state:"",
+                                country:"",
+                                id:""
+                            }
+                            ],
                             wallet:100,
-                            checkout:[],
-                            cart:[],
-                            liked:[]
-                          
-                          }
-                        )
-                        updateModal([false])
-                        updateModal([true,"Succesfully Log In"])
+                            
+                        }))
+                        // updateModal([false])
+                        // updateModal([true,"Succesfully Log In"])
                         
                         
                     }
@@ -150,7 +158,7 @@ function Login() {
                 .catch(error=>{
                     console.log(error)
                     
-                    updateModal([true,"Check internet connnection"])
+                    // updateModal([true,"Check internet connnection"])
 
                 }
 

@@ -2,46 +2,66 @@ import {React,useContext} from 'react'
 import Cart from './Cart'
 import './Like.css'
 import {BsPlus} from 'react-icons/bs'
-import {LoginContext,UserContext} from './UserContext'
+
+import {useSelector,useDispatch} from 'react-redux'
+
+import {addCart,addCartQuantity} from '../SLICE/cartSlice'
+import {addLiked,deleteLiked} from '../SLICE/likedSlice'
+import {updateModal} from '../SLICE/utilsSlice'
+
 
 function Like() {
 
-  const {user,updateUser}=useContext(UserContext)
+  const dispatch=useDispatch()
+  // selector
+  const isLogIn=useSelector(state=>state.authState.isAuthorized)
+  const cart=useSelector(state=>state.cartState)
+  const liked=useSelector(state=>state.likedState)
+  
   
 
-  function removeFromLiked(val){
-    let newUser={...user}
-    console.log(newUser)
-    const itemIndex=newUser.liked.findIndex(item=>item.id==val.id)
-    newUser.liked.splice(itemIndex,1)
-    updateUser({...newUser})
+  function updateUserCart(val){
+    
+    const isDuplicate=cart.findIndex(item=>item.id==val.id)
+    
+    if(isDuplicate<0){
+        let newItem={...val}
+        dispatch(addCart([{...newItem,quantity:1}]))
+    }
+    else if(isDuplicate>=0){
+        dispatch(addCartQuantity(val))
+        console.log(cart)
+    }
 
+    dispatch(updateModal({
+      text:"Item added to cart",
+      isActive:true
+    }))
+  
+     
+}
+
+
+function updateUserLiked(val){
+  
+       dispatch(deleteLiked({id:val.id}))
+
+       dispatch(updateModal({
+        text:"Item removed from",
+        isActive:true
+      }))
+    
+    
+
+ 
+
+
+    
 
      
   }
-  function addToCart(val){
-    let newUser={...user}
-    const itemIndex=newUser.cart.findIndex(item=>item.id==val.id)
-    console.log(itemIndex)
-    if(itemIndex>=0){
-      newUser.cart[itemIndex].quantity+=1
-      
-
-    }
-    else{
-      newUser.cart.push(val)
-      console.log(newUser.cart)
-    }
-    const likedIndex=newUser.liked.findIndex(item=>item.id==val.id)
-    newUser.liked.splice(likedIndex,1)
-   
-    updateUser({...newUser})
-     
-  }
-
  let likedItem=()=>{
-   const liked=[...user.liked]
-   console.log(liked)
+  
    if(liked.length==0 || !liked){
      return(
        <div className="liked-container no-item">
@@ -63,12 +83,12 @@ function Like() {
                 return(
                   <div className="liked-item" key={item.id}>
                     <div className="liked-img">
-                      <img src={item.image} alt="" />
+                      <img src={item.image} alt={item.name} />
                     </div>
                     <p >{item.title}</p>
                     <p className='cart-price'>RM {item.price}</p>
-                    <button className='add-to-btn' onClick={()=>addToCart(item)}>Add to cart</button>
-                    <BsPlus className='remove-btn' onClick={()=>removeFromLiked(item)}/>
+                    <button className='add-to-btn' onClick={()=>updateUserCart(item)}>Add to cart</button>
+                    <BsPlus className='remove-btn' onClick={()=>updateUserLiked(item)}/>
                   </div>
 
                 )

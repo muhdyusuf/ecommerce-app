@@ -3,30 +3,44 @@ import {Link,useNavigate} from 'react-router-dom'
 import {HiOutlineShoppingCart} from 'react-icons/hi'
 import {BiHeart,BiSearch} from 'react-icons/bi'
 import './Navbar.css'
-import {LoginContext,UserContext} from './UserContext'
-import {useSelector} from 'react-redux'
+
+import {useSelector,useDispatch} from 'react-redux'
+
+import {logout} from "../SLICE/authSlice"
 
 function Navbar() {
   let navigate=useNavigate()
-  const {user}=useContext(UserContext)
-  const {isLogIn,updateLogin}=useContext(LoginContext)
-  const {updateModal}=useContext(UserContext)
+  const dispatch=useDispatch()
+
+
+
+  const user=useSelector(state=>state.userState)
+  const isLogIn=useSelector(state=>state.authState.isAuthorized)
+  
+
+
+
+
+
+
+
+  
  
 
    const [userHover,updateHover]=useState(false)
 
-   const _cart=useSelector(state=>state.cartState)
-   const _liked=useSelector(state=>state.likedState)
+   const cart=useSelector(state=>state.cartState)
+   const liked=useSelector(state=>state.likedState)
 
     function userLogin(){
         if(isLogIn){
             return(
                 <div className='user-nav' onClick={()=>updateHover(!userHover)}>
-                    <p>hi {user.name}</p>
+                    <p>hi {user.userName}</p>
                     <div className={userHover? "user-nav-hover active":"user-nav-hover"} onMouseOut={()=>updateHover(!userHover)}>
                         <div className='user-nav-btn' onClick={()=>{
-                            updateModal([true,"User Logged out"])
-                            updateLogin(false)
+                            // updateModal([true,"User Logged out"])
+                            dispatch(logout())
                             navigate('/')
                         }}>Log out</div>
                     </div>
@@ -57,14 +71,14 @@ function Navbar() {
   }
   const navIconSpan=(icon)=>{
       if(icon=="cart"){
-          if(isLogIn && _cart.length>0)return _cart.length
+          if(isLogIn && cart.length>0)return cart.length
           else{
               return 0
           }
       }
       else if(icon=="liked"){
 
-        if(isLogIn && user.liked)return user.liked.length
+        if(isLogIn && liked)return liked.length
         else{
             return 0
         }

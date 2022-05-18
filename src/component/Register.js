@@ -9,25 +9,34 @@ import { Link,useNavigate} from 'react-router-dom'
 import { useState } from 'react'
 import { FaRegUserCircle } from 'react-icons/fa'
 import {AiOutlineEyeInvisible,AiOutlineEye} from 'react-icons/ai'
-import {UserContext,LoginContext} from './UserContext'
+
+import { useDispatch,useSelector} from 'react-redux'
+import {login} from '../SLICE/authSlice'
+import {setUser} from '../SLICE/userSlice'
 
 
 
 
 
-    
+
+
+
+  
 
 
 
 function Register() {
+    const user=useSelector(state=>state.userState)
     let navigate=useNavigate()
+
+    const dispatch=useDispatch()
     
     
-    const{updateUser}=useContext(UserContext)
-    const{updateLogin}=useContext(LoginContext)
+    // const{updateUser}=useContext(UserContext)
+    // const{updateLogin}=useContext(LoginContext)
     
     const [isRegister,updateRegister]=useState(false)
-    const {modal,updateModal}=useContext(UserContext)
+    // const {modal,updateModal}=useContext(UserContext)
 
     const [isValid,updateIsValid]=useState({
         emailAddress:true,
@@ -131,25 +140,44 @@ function Register() {
     function registerUser(){
         if(isValid.userName === true || isValid.userName ===false)
         return
-        updateModal([true,"",[]])
-        let user
-
-        FAKEUSERAPI.then(res=>{
-            user={...res,name:isValid.userName,emailAddress:isValid.emailAddress}
-            return user
-        }).then(user=>{
-        console.log(user)
-             updateModal([false])
-             updateModal([true,"User Registered"])
-            console.log(user)
-            updateUser({...user})
-            updateLogin(true)
-            navigate('/')
-            updateRegister(false)
+        // updateModal([true,"",[]])
         
+        console.log(isValid.userName)
 
+        // FAKEUSERAPI.then(res=>{
+        //     user={...res,name:isValid.userName,emailAddress:isValid.emailAddress}
+        //     return user
+        // }).then(user=>{
+        // console.log(user)
+            //  updateModal([false])
+            //  updateModal([true,"User Registered"])
+            
+            //})
 
-        })
+        dispatch(login({
+            id:"1111"
+        }))
+        dispatch(setUser({
+            id:"",
+            userName:isValid.userName,
+            phone:"",
+            emailAddress:isValid.emailAddress,
+            address:[
+            {
+                firstName:"",
+                lastName:"",
+                address:"",
+                city:"",
+                state:"",
+                country:"",
+                id:""
+            }
+            ],
+            wallet:100,
+        }))
+        console.log("user",user)
+        navigate('/')
+        updateRegister(false)
 
 
        

@@ -1,11 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { useDispatch } from "react-redux"
 
-const ACTION_TYPE={
+
+export const ACTION_TYPE={
     ADDCARTQUANTITY:"addCartQuantity",
     REDUCECARTQUANTITY:"reduceCartQuantity",
     MERGECARTQUANTITY:"mergeCartQuantity"
 
 }
+
 
 export const cartSlice=createSlice({
     name:"cart",
@@ -13,40 +16,77 @@ export const cartSlice=createSlice({
 
     ],
     reducers:{
+        setCart:(state,action)=>{
+            return action.payload
+        },
         addCart:(state,action)=>{
-            state.push(action.payload)
+         
+           return action.payload.concat(state)
         },
         deleteCart:(state,action)=>{
             state=state.filter(item=>item.id!==action.payload.id)
         },
-        updateCart:(state,action)=>{
-            let newcart=[...state].map(item=>{
+        addCartQuantity:(state,action)=>{
+           
+            return state.map(item=>{
                 if(item.id===action.payload.id){
-                    if(action.type===ACTION_TYPE.ADDCARTQUANTITY){
-                        return {...item,quantity:item.quantity++}
-                    }
-                    else if(ACTION_TYPE.REDUCEITEMQUANTITY){
-                        if(action.type===ACTION_TYPE.REDUCECARTQUANTITY){
-                            return {...item,quantity:item.quantity--}
-                        }
-                    }
-                    else if(action.type===ACTION_TYPE.MERGECARTQUANTITY ){
-                        return {...item,quantity:item.quantity+action.payload.quantity}
-                    }
-                    
+                let quantity=item.quantity
+                   if(item.quantity===30){
+                       quantity=30
+                   }
+                   else{
+                       quantity+=1
+                   }
+                   return {...item,quantity:quantity}
+                 
                 }
                 else{
                     return item
                 }
             })
 
-            state=newcart
+          
         },
+        reduceCartQuantity:(state,action)=>{
+        
+            return state.map(item=>{
+                if(item.id===action.payload.id){
+                let quantity=item.quantity
+                   if(item.quantity===1){
+                       quantity=1
+                   }
+                   else{
+                       quantity-=1
+                   }
+                   return {...item,quantity:quantity}
+                 
+                }
+                else{
+                    return item
+                }
+            })
+
+          
+        },
+        mergeCartQuantity:(state,action)=>{
+            console.log(action)
+            state=state.map(item=>{
+                if(item.id===action.payload.id){
+                   return {...item,quantity:item.quantity+action.payload.quantity}
+                }
+                else{
+                    return item
+                }
+            })
+
+          
+        },
+       
        
         
         
     }
 
 })
-export const{addCart,deleteCart,updateCart}=cartSlice.actions
+export const{addCart,deleteCart,addCartQuantity,reduceCartQuantity,mergeCartQuantity,setCart}=cartSlice.actions
 export default cartSlice.reducer

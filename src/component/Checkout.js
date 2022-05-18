@@ -1,28 +1,20 @@
 import React, { useState,useEffect,useContext} from 'react'
 import {useNavigate} from 'react-router-dom'
 import './Checkout.css'
-import {LoginContext,UserContext} from './UserContext'
+
 
 import { formValidation } from '../global-function/formValidation'
+import {useSelector} from 'react-redux'
+
+import {round} from '../global-function/function'
 
 
 function Checkout() {
 
-    const {user,updateUser}=useContext(UserContext)
-    
+  
+ const checkout=useSelector(state=>state.checkoutState)
+ const user=useSelector(state=>state.userState)
 
-
-    let navigate=useNavigate()
-    if(user.checkout.length==0){
-        navigate('/shop')
-    }
-
-    
-    
-   
-
-   
-   
 
     const allState={
         "Johor": [
@@ -258,9 +250,11 @@ function Checkout() {
     
    
    
-    const totalPrice=user.checkout.reduce((total,item)=>item.price*item.quantity+total
-    ,0)
-    const shippingPrice=user.checkout.reduce((total,item)=>8+total,0)
+    const totalPrice=round(checkout.reduce((total,item)=>item.price*item.quantity+total
+    ,0))
+
+    
+    const shippingPrice=checkout.reduce((total,item)=>8+total,0)
     const receiveBy=()=>{
         const monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"
         ]
@@ -276,86 +270,81 @@ function Checkout() {
 
     }
 
-    // function updateInput(e){
-    //     const newForm={...form}
-    //     switch (e.target.name){
-    //         case "phone":{
-    //             const regex=/^(\+?6?01)[0-46-9]-*[0-9]{7,8}$/g
-    //             const isTrue=regex.test(e.target.value)
-    //             isTrue? newForm.phone=e.target.value:newForm.phone=false
-    //             console.log(newForm.phone)
+    function updateInput(e){
+        const newForm={...form}
+        switch (e.target.name){
+            case "phone":{
+                const regex=/^(\+?6?01)[0-46-9]-*[0-9]{7,8}$/g
+                const isTrue=regex.test(e.target.value)
+                isTrue? newForm.phone=e.target.value:newForm.phone=false
+                console.log(newForm.phone)
 
-    //         }
-    //         break;
-    //         case "postcodeZip":{
-    //             const regex=/\d{5}/g
-    //             const isTrue=regex.test(e.target.value)
-    //             isTrue? newForm.postcodeZip=e.target.value:newForm.postcodeZip=false
-    //             console.log(newForm.postcodeZip)
+            }
+            break;
+            case "postcodeZip":{
+                const regex=/\d{5}/g
+                const isTrue=regex.test(e.target.value)
+                isTrue? newForm.postcodeZip=e.target.value:newForm.postcodeZip=false
+                console.log(newForm.postcodeZip)
 
-    //         }
-    //         break;
-    //         case "stateProvince":{
-    //             newForm.stateProvince=e.target.value
+            }
+            break;
+            case "stateProvince":{
+                newForm.stateProvince=e.target.value
                
                 
-    //         }
-    //         case "TownCity":{
-    //             newForm.townCity=e.target.value
+            }
+            case "TownCity":{
+                newForm.townCity=e.target.value
 
-    //         }
-    //         case "address":{
-    //             newForm.address=e.target.value
+            }
+            case "address":{
+                newForm.address=e.target.value
                 
 
-    //         }
+            }
 
-    //         break;
-    //         case "emailAddress":{
-    //             const regex=/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
-    //             let isTrue=regex.test(e.target.value)
-    //             isTrue? newForm.emailAddress=e.target.value:newForm.emailAddress=false
-    //             console.log(newForm.emailAddress)
+            break;
+            case "emailAddress":{
+                const regex=/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+                let isTrue=regex.test(e.target.value)
+                isTrue? newForm.emailAddress=e.target.value:newForm.emailAddress=false
+                console.log(newForm.emailAddress)
                 
-    //         }
+            }
 
-    //         break;
-    //         case "firstName":{
-    //             const regex=/^[a-z]+$/i
-    //             let isTrue=regex.test(e.target.value)
-    //             isTrue? newForm.firstName=e.target.value:newForm.firstName=false
-    //             console.log(newForm.firstName)
+            break;
+            case "firstName":{
+                const regex=/^[a-z]+$/i
+                let isTrue=regex.test(e.target.value)
+                isTrue? newForm.firstName=e.target.value:newForm.firstName=false
+                console.log(newForm.firstName)
                 
-    //         }
-    //         break;
-    //         case "lastName":{
-    //             const regex=/^[a-z]+$/i
-    //             let isTrue=regex.test(e.target.value)
-    //             isTrue? newForm.lastName=e.target.value:newForm.lastName=false
-    //             console.log(newForm)
+            }
+            break;
+            case "lastName":{
+                const regex=/^[a-z]+$/i
+                let isTrue=regex.test(e.target.value)
+                isTrue? newForm.lastName=e.target.value:newForm.lastName=false
+                console.log(newForm)
                 
-    //         }
-    //         break;
+            }
+            break;
             
 
 
 
 
 
-    //     }
-    //     updateForm({...newForm})
-
-    // }
-
-
-
-
-
-    function updateInput(e){
-        console.log(formValidation(e,form))
-        
+        }
+        updateForm({...newForm})
 
     }
+
+
+
+
+
 
     function placeOrder(){
         if(Object.values(form).some(item=>item===true)){
@@ -476,7 +465,7 @@ function Checkout() {
                         <div>
                             <h3>Your order</h3>
                         </div>
-                        {user.checkout.map(item=>{
+                        {checkout.map(item=>{
                             return(
                                 <div className='checkout-list'>
                                     <p>{item.title} <span>x{item.quantity}</span></p>

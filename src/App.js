@@ -16,93 +16,98 @@ import BottomNav from './component/BottomNav';
 
 import{BrowserRouter as Router,Routes,Route} from 'react-router-dom'
 import { useState,useEffect,useContext } from 'react';
-import {LoginContext,UserContext} from './component/UserContext'
 import Modal from './component/Modal';
 import User from './component/User';
 import Input from './component/Input';
 
 import {useSelector,useDispatch} from 'react-redux'
-import {addCart} from './SLICE/cartSlice'
+import {setCart} from './SLICE/cartSlice'
+import {setLiked} from './SLICE/likedSlice'
 import {setUser} from './SLICE/userSlice'
+import {login,logout} from './SLICE/authSlice'
+
+
 
 
 
 function App() {
 
- const [isLogIn,updateLogin]=useState(true)
- const [user,updateUser]=useState({
+ 
 
-    id:"123456789",
-    userName:"",
-    name:"",
-    phone:"",
-    emailAddress:"",
-    address:{
-      firstName:"",
-      lastName:"",
-      address:"",
-      city:"",
-      state:"",
-      country:"",
-    },
-    wallet:100,
-    checkout:[],
-    cart:[],
-    liked:[]
-               
-})
+  const _user=useSelector(state=>state.userState)
+  const _cart=useSelector(state=>state.cartState)
+  const _liked=useSelector(state=>state.likedState)
+  const _auth=useSelector(state=>state.authState)
+  const isLogin=useSelector(state=>state.authState.isAuthorized)
 
-const _user=useSelector(state=>state.userState)
-const _cart=useSelector(state=>state.cartState)
 
 //dispatch
-const  dispatch=useDispatch()
-
-
-
-
-
-console.log(_cart)
-
-
-
-console.log()
- const [modal,updateModal]=useState([false,"asdasd"])
-
+  const  dispatch=useDispatch()
+  
 
   useEffect(()=>{
-    const loginData=localStorage.getItem("isLogin")
-    const newUser=localStorage.getItem('USER_DATA')
+
+    const loginData=localStorage.getItem("AUTH_STATE")
+    const user=localStorage.getItem('USER_STATE')
+    const cart=localStorage.getItem('CART_STATE')
+    const liked=localStorage.getItem('LIKED_STATE')
+
+   const newUser=JSON.parse(user)
+   const newCart=JSON.parse(cart)
+   const newLiked=JSON.parse(liked)
+   
+
+
+   if( JSON.parse(loginData)){
     
-    JSON.parse(loginData) && isLogIn ? updateLogin(true):updateLogin(false)
-    if(isLogIn && JSON.parse(newUser)){
-      const newUser=localStorage.getItem("USER_DATA")
-      updateUser({...JSON.parse(newUser)})
-      
+      dispatch(login({
+      currentUser:{
+        id:User.id
+      },
+      isAuthorized:true
+      }))
+      dispatch(setUser({...newUser}))
+      dispatch(setLiked(newLiked))
+      dispatch(setCart(newCart))
+   
+
     }
+      
     
 
   },[])
 
   useEffect(()=>{
-    localStorage.setItem("isLogin",isLogIn)
-    const loginData=localStorage.getItem("isLogin")
+    if(isLogin){
+      localStorage.setItem("AUTH_STATE",JSON.stringify(isLogin))
+    }
+  
     
     
-  },[isLogIn])
+  },[isLogin])
 
   useEffect(()=>{
-    let newUser={...user}
-    localStorage.setItem("USER_DATA",JSON.stringify(newUser))
-  },[user])
+    localStorage.setItem("USER_STATE",JSON.stringify(_user))
+  },[_user])
+  useEffect(()=>{
+    
+    localStorage.setItem("CART_STATE",JSON.stringify(_cart))
+  
+  },[_cart])
 
+  useEffect(()=>{
+    localStorage.setItem("LIKED_STATE",JSON.stringify(_liked))
+   
+  },[_liked])
+
+
+ 
 
 
 
   return (
     <>
-    <UserContext.Provider value={{updateUser,user,modal,updateModal}}>
-    <LoginContext.Provider value={{isLogIn,updateLogin}}>
+   
     <Router>
       <Navbar />
      
@@ -113,17 +118,17 @@ console.log()
         <Route path="/shop/:search" element={<Shop/>}/>
         <Route path="/product/:productId" element={<Product/>}/>
 
-        {isLogIn && (
+        {_auth.isAuthorized && (
           <>
           <Route path="/cart" element={<Cart/>}/>
            <Route path="/liked" element={<Like/>}/>
            <Route path="/checkout" element={<Checkout/>}/>
            <Route path='/user' element={<User/>}/>
-          <Route path="*" element={<ErrorPage isLogIn={isLogIn}/>}/>
+          {/* <Route path="*" element={<ErrorPage isLogIn={_auth.isAuthorized}/>}/> */}
          </>
 
         )}
-        {!isLogIn && (
+        {!_auth.isAuthorized && (
           <>
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
@@ -146,13 +151,9 @@ console.log()
        <BottomNav/>
     </Router>
     <Modal/>
-    </LoginContext.Provider>
-    </UserContext.Provider>
   
-    <button onClick={()=>dispatch(addCart({
-      id:"111111",
-    }))}>add</button>
-
+  
+  
     </>
   );
 }

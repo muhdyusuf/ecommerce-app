@@ -9,14 +9,23 @@ import {FaHeart,FaRegHeart} from 'react-icons/fa'
 import Itemlist from './Itemlist'
 import Newsletter from './Newsletter'
 import Promise from './Promise'
-import {LoginContext,UserContext} from './UserContext'
+
+import {useSelector,useDispatch} from "react-redux"
+
+import {addCart,addCartQuantity,mergeCartQuantity} from '../SLICE/cartSlice'
+import {addLiked, addliked,deleteLiked} from '../SLICE/likedSlice'
+import {addCheckout} from '../SLICE/checkoutSlice'
+import {updateModal} from '../SLICE/utilsSlice'
+
 
 
 function Product() {
+    const dispatch=useDispatch()
+    const liked=useSelector(state=>state.likedState)
+    const cart=useSelector(state=>state.cartState)
+    const isLogIn=useSelector(state=>state.authState.isAuthorized)
+    
 
-    const {user,updateUser}=useContext(UserContext)
-    const {modal,updateModal}=useContext(UserContext)
-    const {isLogIn}=useContext(LoginContext)
 
     let navigate=useNavigate()
     const {productId}=useParams()
@@ -45,7 +54,7 @@ useEffect(()=>{
     
     
   
-   },productId)
+   },[productId])
 
 
 const productRating=()=>{
@@ -76,60 +85,64 @@ const productRating=()=>{
 
 
 
- function updateUserCart(val){
-    const newUser=user
-    
-    const isDuplicate=newUser.cart.findIndex(item=>item.id==val.id)
-    console.log(isDuplicate)
-    if(isDuplicate<0){
-        val.quantity=productData.quantity
-        newUser.cart=newUser.cart.concat(val)
-        
+ function updateCart(val){
+    const isDuplicate=cart.findIndex(item=>item.id===val.id)
+    console.log(isLogIn)
+    if(!isLogIn){
+        navigate('/login')
+    }
+   
+    else if(isDuplicate<0){
+        dispatch(addCart(val))
         
     }
     else if(isDuplicate>=0){
-        newUser.cart[isDuplicate].quantity+=productData.quantity
-        
+        dispatch(mergeCartQuantity(val))
 
     }
+    dispatch(updateModal({
+        text:"Item added to liked",
+        isActive:true
+      }))
 
-    console.log(newUser)
-    updateUser({...newUser})
-    updateModal([true,"Item added to cart"])
-    
-     
 }
 
 
-function updateUserLiked(val){
-    const newUser=user
-    const isDuplicate=newUser.liked.findIndex(item=>item.id==val.id)
-    if(isDuplicate<0){
-        val.quantity=1
-        newUser.liked=newUser.liked.concat(val)
-        updateModal([true,"Item added to liked"])
-        
+function updateLiked(val){
+
+    const isDuplicate=liked.findIndex(item=>item.id===val.id)
+    if(!isLogIn){
+        navigate('/login')
+    }
+    else if(isDuplicate<0){
+        dispatch(addLiked(val))
+        dispatch(updateModal({
+            text:"Item added to liked",
+            isActive:true
+          }))
+            
         
     }
     else if(isDuplicate>=0){
-        newUser.liked.splice(isDuplicate,1)
-        updateModal([true,"Item removed from liked"])
-   
+        dispatch(deleteLiked({id:val.id}))
+        dispatch(updateModal({
+            text:"Item removed to liked",
+            isActive:true
+          }))
+            
         
     }
-   
-    updateUser({...newUser})
     
 
      
   }
  function updateQuantity(val){
-     if(val=="plus"){
+     if(val==="plus"){
          let newData={...productData}
          newData.quantity+=1
          updateProductData({...newData})
      }
-     else if(val=="minus" && productData.quantity >1){
+     else if(val==="minus" && productData.quantity >1){
         let newData={...productData}
         newData.quantity-=1
         updateProductData({...newData})
@@ -138,28 +151,24 @@ function updateUserLiked(val){
 
 
  const isLiked=(val)=>{
-    const isDuplicate=user.liked.findIndex(item=>item.id==val.id)
+    const isDuplicate=liked.findIndex(item=>item.id==val.id)
     if(isDuplicate<0){
         return (
-            <FaRegHeart onClick={()=>updateUserLiked(val)}/>
+            <FaRegHeart onClick={()=>updateLiked(val)}/>
         )
     }
     else if(isDuplicate>=0){
         return(
-            <FaHeart onClick={()=>updateUserLiked(val)} className="liked-icon-fill"/>
+            <FaHeart onClick={()=>updateLiked(val)} className="liked-icon-fill"/>
         )
     }
 
 }
 function buyNow(){
    
-    let newUser={...user}
-    newUser.checkout=[productData]
-    updateUser({...newUser})
+    dispatch(addCheckout(productData))
     navigate('/checkout')
     
-   
-
 
 }
 
@@ -234,7 +243,7 @@ function buyNow(){
                                      <span className='quantity'>{productData.quantity}</span>
                                      <button className='quantity-btn add' onClick={()=>updateQuantity("plus")}><TiPlus/></button>
                                  </div>
-                                 <button onClick={()=>updateUserCart(productData)}>Add to cart</button>
+                                 <button onClick={()=>updateCart(productData)}>Add to cart</button>
                                  <button onClick={buyNow}>Buy Now</button>
                                  {isLiked(productData)}
                                 </div>
@@ -243,7 +252,7 @@ function buyNow(){
                         </div>
                         <div className="related-product border-bottom">
                             <h1 className='fs2'>Related Product</h1>
-                            <Itemlist isLogIn={isLogIn}  dataProps={["category",productData.category]} updateUser={updateUser} user={user} length={4}/>
+                            <Itemlist  dataProps={["category",productData.category]} length={4}/>
                         </div>
                         
                         <Newsletter/>
